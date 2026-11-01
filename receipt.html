@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ReBloom - Order Receipt</title>
+  <meta name="description" content="Order completion and receipt confirmation for ReBloom handcrafted eco-friendly floral decorations.">
+  <link rel="icon" type="image/png" href="assets/images/Logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://api.fontshare.com/v2/css?f[]=telma@300,400,500,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/receipt.css">
+</head>
+<body>
+
+<header>
+  <nav  class="navbar">
+        <div class="nav_left">
+            <a href="index.html#home">
+                <img src="assets/images/Logo.png" alt="ReBloom Logo" class="logo_img">
+                <span class="logo_txt">ReBloom</span>
+            </a>
+        </div>
+        
+        <ul class="nav_mid">
+            <li><a href="index.html#home" class="nav_link active">Home</a></li>
+            <li><a href="index.html#about" class="nav_link">About</a></li>
+            <li><a href="product.html" class="nav_link">Product</a></li>
+            <li><a href="index.html#faq" class="nav_link">FAQ</a></li>
+            <li><a href="index.html#contact" class="nav_link">Contact</a></li>
+        </ul>
+        
+        <div class="nav_right">
+            <div class="lang_switch">
+                <button type="button" class="lang_btn active">IDN</button>
+                <button type="button" class="lang_btn">ENG</button>
+            </div>
+            <a href="#" class="btn_cart" aria-label="Shopping Cart">
+              <i class="fa-solid fa-cart-shopping cart_icon"></i>
+              <span>Cart</span>
+            </a>
+        </div>
+    </nav>
+</header>
+
+  <!-- Main Content Layout -->
+  <main class="rcpt_layout">
+    <div class="rcpt_container">
+      
+      <section class="rcpt_status">
+        <div class="status_badge" aria-hidden="true">
+          <div class="badge_inner">
+            <i class="fa-solid fa-check chk_icon"></i>
+          </div>
+        </div>
+
+        <h1 class="status_title">Your Order Is Being Processed!</h1>
+        <p class="status_desc">Thank you for your purchase! No screenshot needed—just click 'Send To Admin' to automatically copy your ready-to-paste order receipt and send it via WhatsApp.</p>
+
+        <div class="status_actions">
+          <a href="https://wa.me/6282132829795" target="_blank" rel="noopener noreferrer" class="btn_primary" id="btn_admin">
+            Send To Admin
+          </a>
+          <a href="product.html" class="btn_outline" id="btn_back">
+            <span>Back To Product</span>
+            <i class="fa-solid fa-arrow-right btn_arrow" aria-hidden="true"></i>
+          </a>
+        </div>
+      </section>
+
+      
+      <aside class="rcpt_card" aria-label="Order Receipt Details">
+        <h2 class="card_title">Order Details</h2>
+
+        <div class="order_info">
+          <div class="info_group">
+            <span class="info_label">Order Date &amp; Time</span>
+            <span class="info_val">12 Oct 2026, 09.00 AM</span>
+          </div>
+
+          <div class="info_group">
+            <span class="info_label">Payment Method</span>
+            <span class="info_val">Cash Only (Pre-Order COD)</span>
+          </div>
+        </div>
+
+        <hr class="divider_dash">
+
+        <div class="items_sec">
+          <h3 class="items_title">Items Details</h3>
+          <hr class="divider_solid">
+
+          <div class="item_row">
+            <span class="item_name">1x Regular Pack</span>
+            <div class="prod_desc">
+              <span class="custom_dot" aria-hidden="true"></span>
+              <span class="custom_text">Sky Blue (No custom note)</span>
+            </div>
+            <span class="item_price">Rp 10.000,00</span>
+          </div>
+          <hr class="divider_solid">
+        </div>
+
+        <div class="total_group">
+          <span class="total_label">Total</span>
+          <span class="total_val">Rp 10.000,00</span>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <script src="assets/js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReBloom - Product Detail</title>
+    <meta name="description" content="ReBloom creates beautiful handmade flower vases and bouquets from recycled plastic, combining elegance, sustainability, and creative craftsmanship.">
+    <link rel="icon" type="image/png" href="assets/images/Logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=telma@300,400,500,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/product.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav_left">
+            <a href="index.html#home">
+                <img src="assets/images/Logo.png" alt="ReBloom Logo" class="logo_img">
+                <span class="logo_txt">ReBloom</span>
+            </a>
+        </div>
+        
+        <ul class="nav_mid">
+            <li><a href="index.html#home" class="nav_link">Home</a></li>
+            <li><a href="index.html#about" class="nav_link">About</a></li>
+            <li><a href="index.html#products" class="nav_link active">Product</a></li>
+            <li><a href="index.html#faq" class="nav_link">FAQ</a></li>
+            <li><a href="#contact" class="nav_link">Contact</a></li>
+        </ul>
+        
+        <div class="nav_right">
+            <div class="lang_switch">
+                <button type="button" class="lang_btn active">IDN</button>
+                <button type="button" class="lang_btn">ENG</button>
+            </div>
+        </div>
+    </nav>
+
+    <section class="prod_sec" id="product_detail">
+        <div class="container prod_wrap">
+            <div class="prod_left">
+                <div class="prod_main_box">
+                    <img src="assets/images/Product_1.jpg" alt="Flower Bouquet" class="prod_main_img" id="prod_main_img">
+                </div>
+                
+                <div class="prod_thumbs">
+                    <div class="prod_thumb">
+                        <img src="assets/images/Product_1_thumbnail_1.jpg" alt="Thumbnail 1" class="prod_thumb_img">
+                    </div>
+                    <div class="prod_thumb">
+                        <img src="assets/images/Product_1_thumbnail_2.jpg" alt="Thumbnail 2" class="prod_thumb_img">
+                    </div>
+                    <div class="prod_thumb">
+                        <img src="assets/images/Product_1_thumbnail_3.jpg" alt="Thumbnail 3" class="prod_thumb_img">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="prod_right">
+                <h1 class="prod_title" id="prod_title">Flower Pot Regular</h1>
+                
+                <p class="prod_desc" id="prod_desc">
+                    Bring beauty and a warm atmosphere into your space with our signature handcrafted recycled plastic floral pot. Select and request your preferred flower and pot colors.
+                </p>
+                
+                <div class="prod_rating">
+                    <div class="prod_stars">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                    </div>
+                    <span class="prod_rate_txt">5.0 | 12 Reviews</span>
+                </div>
+
+                <div class="custom_row">
+                    <div class="color_sec">
+                        <span class="custom_lbl">Flower Color</span>
+                        <div class="swatch_grp">
+                            <button type="button" class="color_swatch swatch_blue active" data-color="Sky Blue" data-hex="#0084FF" aria-label="Sky Blue" title="Sky Blue"></button>
+                            <button type="button" class="color_swatch swatch_purple" data-color="Purple" data-hex="#A855F7" aria-label="Purple" title="Purple"></button>
+                            <button type="button" class="color_swatch swatch_orchid" data-color="Orchid Pink" data-hex="#E199D2" aria-label="Orchid Pink" title="Orchid Pink"></button>
+                            <button type="button" class="color_swatch swatch_pink" data-color="Pastel Pink" data-hex="#F5B0C4" aria-label="Pastel Pink" title="Pastel Pink"></button>
+                        </div>
+                    </div>
+
+                    <div class="qty_sec">
+                        <span class="custom_lbl">Quantity</span>
+                        <div class="qty_box">
+                            <button type="button" class="qty_btn qty_minus" aria-label="Decrease quantity">-</button>
+                            <span class="qty_val">1</span>
+                            <button type="button" class="qty_btn qty_plus" aria-label="Increase quantity">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="note_sec">
+                    <label class="custom_lbl" for="custom_note">Note</label>
+                    <input type="text" id="custom_note" class="note_inp" placeholder="Have a special request? Leave a note for our admin.">
+                </div>
+                
+                <div class="prod_price_box">
+                    <span class="price_curr">Rp</span>
+                    <span class="price_val" id="price_val">10.000</span>
+                </div>
+                
+                <div class="prod_sec_pay">
+                    <i class="fa-solid fa-shield-halved sec_pay_icon"></i>
+                    <span>Secure Payment By <span class="sec_pay_brand">ReBloom</span></span>
+                </div>
+                
+                <button type="button" class="btn btn_primary prod_buy_btn">BUY NOW</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="rel_sec" id="related_products">
+        <div class="container rel_wrap">
+            <div class="rel_left">
+                <div class="rel_card">
+                    <div class="rel_img_box">
+                        <img src="assets/images/Product_thumbnail.jpg" alt="Flower Bird Gift" class="rel_img">
+                    </div>
+                    <h3 class="rel_card_title">Flower Bird Gift</h3>
+                    <div class="rel_card_rating">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <span class="rel_card_count">(10)</span>
+                    </div>
+                    <div class="rel_card_price">
+                        <span class="price_curr_sm">Rp</span>
+                        <span class="price_val_sm">12.000</span>
+                    </div>
+                    <button type="button" class="btn btn_primary rel_btn" data-pack="bird_gift">Switch / Order Pack</button>
+                </div>
+
+                <div class="rel_card">
+                    <div class="rel_img_box">
+                        <img src="assets/images/Product_img_4.jpg" alt="Lamp Flower Pot" class="rel_img">
+                    </div>
+                    <h3 class="rel_card_title">Lamp Flower Pot</h3>
+                    <div class="rel_card_rating">
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <span class="rel_card_count">(10)</span>
+                    </div>
+                    <div class="rel_card_price">
+                        <span class="price_curr_sm">Rp</span>
+                        <span class="price_val_sm">15.000</span>
+                    </div>
+                    <button type="button" class="btn btn_primary rel_btn" data-pack="lamp_pot">Switch / Order Pack</button>
+                </div>
+            </div>
+
+            <div class="rel_right">
+                <h2 class="rel_title">FIND RELATED<br><span class="hl_red">PRODUCTS</span></h2>
+                <div class="rel_divider"></div>
+                <p class="rel_desc">
+                    Looking for more? Explore similar products and discover new styles that match your taste.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact_sec" id="contact">
+        <div class="container contact_box">
+            <div class="contact_left">
+                <div class="contact_logo_box">
+                    <img src="assets/images/Logo.png" alt="ReBloom Logo" class="contact_logo">
+                    <span class="contact_logo_txt">ReBloom</span>
+                </div>
+                <h2 class="contact_title">Have More<br><span class="hl_red">Questions</span> In Mind?</h2>
+                <p class="contact_sub">Write Down Your Thoughts, And Contact Us!</p>
+                
+                <a href="whatsapp://send?phone=6285955044663" target="_blank" rel="noopener noreferrer" class="contact_wa_btn">
+                    <i class="fa-brands fa-whatsapp"></i> WhatsApp
+                </a>
+            </div>
+            
+            <div class="contact_right">
+                <form class="contact_form" id="contact_form">
+                    <div class="form_row">
+                        <div class="form_grp">
+                            <label class="form_lbl" for="user_name">Your Name</label>
+                            <input type="text" id="user_name" class="form_inp" placeholder="Your full name..." required>
+                        </div>
+                        <div class="form_grp">
+                            <label class="form_lbl" for="user_email">Email Address</label>
+                            <input type="email" id="user_email" class="form_inp" placeholder="Your email address..." required>
+                        </div>
+                    </div>
+                    <div class="form_grp">
+                        <label class="form_lbl" for="user_msg">Message</label>
+                        <textarea id="user_msg" class="form_inp form_txt" placeholder="Write down your message here..." rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn_primary contact_submit_btn">Send Your Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p class="footer_txt">&copy; 2026 ReBloom. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/script.js"></script>
+</body>
+</html>

@@ -6,32 +6,34 @@
 3. [Page-Level DOM Architecture](#3-page-level-dom-architecture)
    - [3.1 Landing Page (`index.html`)](#31-landing-page-architecture-indexhtml)
    - [3.2 Product Detail & Configurator (`product.html`)](#32-product-detail--configurator-architecture-producthtml)
-   - [3.3 Receipt Page (`receipt.html`)](#33-receipt-page-architecture-receipthtml)
+   - [3.3 Shopping Cart & Receipt Page (`receipt.html`)](#33-shopping-cart--receipt-page-architecture-receipthtml)
 4. [Layout Systems, Grid Mechanics & Responsive Breakpoints](#4-layout-systems-grid-mechanics--responsive-breakpoints)
-5. [Client-Side Runtime & State Architecture (`assets/js/script.js`)](#5-client-side-runtime--state-architecture-assetsjsscriptjs)
+5. [Client-Side Runtime & Decoupled Script Architecture](#5-client-side-runtime--decoupled-script-architecture)
 6. [External Asset, Typography & Styling Pipeline](#6-external-asset-typography--styling-pipeline)
 
 ---
 
 ## 1. System Overview & End-to-End Web Flow
-ReBloom is a static, zero-backend, micro-site frontend web application designed to promote handmade floral decorations crafted from 100% recycled plastic waste and facilitate **Pre-Order / Cash on Delivery (COD)** purchases. The architecture operates without database servers, backend routing, or third-party payment gateways, conducting state transfer across pages via `sessionStorage` (`rebloom_order`) and finalizing transactions via direct WhatsApp handoff (`6282132829795`).
+ReBloom is a static, zero-backend, micro-storefront frontend web application designed to promote handmade floral decorations crafted from 100% recycled plastic waste and facilitate **Pre-Order / Cash on Delivery (COD)** purchases. The architecture operates without database servers, backend routing, or third-party payment gateways, conducting state persistence across pages via `localStorage` (`rebloom_cart`) and finalizing transactions via direct WhatsApp handoff (`6282132829795`).
 
 ```text
 ReBloom End-to-End Application Flow
 ┌────────────────────────────────────────────────────────────────────────────┐
-│ 1. Discovery & Brand Storytelling (index.html + style.css)                 │
+│ 1. Discovery & Brand Storytelling (index.html + style.css + script.js)     │
 │    ├── Brand Hero, Features Bar, Vision & Mission, Origin, Why Choose Us   │
 │    ├── Three-Pack Catalog Grid (.prod_grid > 3x .prod_card > .prod_btn)    │
-│    │   ├── Card 1 -> product.html?pack=regular                             │
-│    │   ├── Card 2 -> product.html?pack=bird_gift                           │
-│    │   └── Card 3 -> product.html?pack=lamp_pot                            │
+│    │   ├── Card 1 -> product.html                                          │
+│    │   ├── Card 2 -> product_2.html                                        │
+│    │   └── Card 3 -> product_3.html                                        │
 │    └── FAQ Accordion (.faq_box) [Pre-Order COD] & Direct Contact           │
 └─────────────────────────────────────┬──────────────────────────────────────┘
                                       │ Clicks "Order Product" (.prod_btn)
                                       ▼
 ┌────────────────────────────────────────────────────────────────────────────┐
-│ 2. Product Configurator & Detail Showcase (product.html + product.css)     │
-│    ├── Photo Gallery (#prod_main_img + .prod_thumb swapper)                │
+│ 2. Dedicated Product Pages (product.html, product_2.html, product_3.html)  │
+│    ├── Dedicated Controller: assets/js/product.js                          │
+│    ├── Standardized 4-Photo Gallery (#prod_main_img + 3x .prod_thumb)      │
+│    │   └── Farthest-Left Queue Rotation on thumbnail click (150ms opacity) │
 │    ├── Dynamic Pack Configurator (.prod_right)                             │
 │    │   ├── Hooks: #prod_title, #prod_desc, #price_val                      │
 │    │   ├── 4x Flower Color Swatches (Sky Blue, Purple, Orchid, Pastel Pink)│
@@ -39,28 +41,34 @@ ReBloom End-to-End Application Flow
 │    │   ├── Live Quantity-Based Price Calculation (#price_val)              │
 │    │   ├── Special Request Note Input (#custom_note.note_inp)              │
 │    │   └── Primary Checkout Action (.prod_buy_btn [BUY NOW])               │
-│    └── Dynamic Related Products Showcase (.rel_sec#related_products)       │
-│        └── Renders inactive packs + .rel_btn switches active pack via URL  │
+│    └── Related Products Showcase (.rel_sec#related_products)               │
+│        └── .rel_btn navigates to other packs via window.location.href      │
 └─────────────────────────────────────┬──────────────────────────────────────┘
-                                      │ Captures configuration & saves to
-                                      │ sessionStorage ('rebloom_order')
+                                      │ Saves / appends configured item into
+                                      │ localStorage ('rebloom_cart')
                                       ▼
 ┌────────────────────────────────────────────────────────────────────────────┐
-│ 3. Order Receipt & WhatsApp Handoff (receipt.html + receipt.css)           │
-│    ├── Hydrated Post-Checkout Order Receipt (assets/js/script.js)          │
-│    ├── Left Status Confirmation (.rcpt_status)                             │
-│    │   ├── Checkmark Status Badge (.status_badge > .badge_inner)           │
-│    │   ├── Headline & Screenshot-Free Copy (.status_desc)                  │
-│    │   ├── Auto-Copy & WhatsApp CTA (#btn_admin [Send To Admin])           │
-│    │   └── Return Navigation (#btn_back [Back To Product])                 │
-│    └── Right Dynamic Receipt Card (.rcpt_card)                             │
-│        ├── Real Order Timestamp (.info_val [dd MMM yyyy, hh:mm AM/PM])     │
-│        ├── Payment Method (.info_val [Cash Only (Pre-Order COD)])          │
-│        ├── Line Item (.item_name [<qty>x <pack_name>])                     │
-│        ├── Color Indicator Dot (.custom_dot styled with color_hex)         │
-│        ├── Custom Text (.custom_text [<Color>, "<Note>" or (No note)])     │
-│        ├── Line Item Subtotal (.item_price [Rp XX.000,00])                 │
-│        └── Grand Total Summary (.total_group > .total_val [Rp XX.000,00])  │
+│ 3. Shopping Cart & Receipt Page (receipt.html + receipt.css + receipt.js)  │
+│    ├── Subheader Bar: Eyebrow, "Your Cart", & Dynamic Count Highlight      │
+│    ├── State A: Empty Cart (#empty_cart_state)                             │
+│    │   └── Centered card, soft pink cart circle, Start Shopping CTA        │
+│    └── State B: Populated Cart (#populated_cart_state)                     │
+│        ├── Left Column: Cart Items List (.cart_items_column)               │
+│        │   ├── Item Cards (.cart_item_card): Thumbnail, category badge,    │
+│        │   │   title, color dot pill, editable note, trash delete button,  │
+│        │   │   unit price, and +/- quantity stepper                        │
+│        │   └── Continue Shopping Button (.continue_shopping_btn)           │
+│        └── Right Column: Sticky Order Summary (.order_summary_card)        │
+│            ├── Payment Method: Cash Only (Pre-Order COD)                   │
+│            ├── Delivery Mode: Direct Handover / WhatsApp Scheduled         │
+│            ├── Real-Time Order Date (#summary_order_date)                  │
+│            ├── Subtotal (#summary_subtotal_price)                          │
+│            ├── Green FREE Badges for Packaging & Shipping Fees             │
+│            ├── Grand Total (#summary_grand_total)                          │
+│            ├── Green COD Guarantee Box (.cod_guarantee_box)                │
+│            ├── Proceed to Checkout Button (#proceed_checkout_btn)          │
+│            │   └── Copies itemized receipt & opens WhatsApp (wa.me)        │
+│            └── Checkout Footnote (.checkout_footnote)                      │
 └────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -70,10 +78,14 @@ ReBloom End-to-End Application Flow
 
 ```text
 ReBloom Project Root
-├── index.html                  # Promotional landing page & product tier catalog
-├── product.html                # Dynamic product configurator, color/qty/note selection & related items
-├── receipt.html                # Post-checkout dynamic order receipt & WhatsApp handoff view
-├── AGENTS.md                   # Antigravity AI workflow entry guide & reading sequence
+├── index.html                  # Promotional landing page (loads ONLY assets/js/script.js)
+├── product.html                # Pack 1 (Flower Pot Regular) page (loads ONLY assets/js/product.js)
+├── product_2.html              # Pack 2 (Flower Bird Gift) page (loads ONLY assets/js/product.js)
+├── product2.html               # Synced Pack 2 mirror route for zero-404 compatibility
+├── product_3.html              # Pack 3 (Lamp Flower Pot) page (loads ONLY assets/js/product.js)
+├── product3.html               # Synced Pack 3 mirror route for zero-404 compatibility
+├── receipt.html                # Dual-state shopping cart (loads ONLY assets/js/receipt.js)
+├── AGENT.md                    # Antigravity AI workflow entry guide & reading sequence
 ├── PRD.md                      # Master Product Requirements Document
 ├── Design_System.md            # UI/UX Design Brief & Hardcoded Design System specifications
 ├── architecture.md             # Full-project structural & layout architecture documentation
@@ -83,9 +95,11 @@ ReBloom Project Root
     ├── css/
     │   ├── style.css           # Global & landing page styles (shared navbar, footer, contact)
     │   ├── product.css         # Product detail, configurator & related products styles
-    │   └── receipt.css         # Standalone receipt page layout & card styles
+    │   └── receipt.css         # Shopping cart dual-state layout, item cards & sticky summary
     ├── js/
-    │   └── script.js           # Shared client runtime: catalog, configurator, dynamic receipt & WhatsApp
+    │   ├── script.js           # Dedicated Landing Page Controller (index.html ONLY)
+    │   ├── product.js          # Dedicated Product Configurator & Gallery Controller (product*.html ONLY)
+    │   └── receipt.js          # Dedicated Shopping Cart & WhatsApp Controller (receipt.html ONLY)
     └── images/
         ├── Logo.png            # Brand emblem graphic
         ├── Tulip_hero.png      # Hero section centerpiece floral image
@@ -93,11 +107,20 @@ ReBloom Project Root
         ├── BungaVM.jpg         # Vision & Mission floral arrangement photo 2
         ├── Fotbar1.jpg         # About Origin team photo 1
         ├── Fotbar2.jpg         # About Origin artisan photo 2
-        ├── Product_img.jpg     # Primary product showcase image (regular)
-        ├── Product_img_2.jpg   # Product gallery thumbnail 1
-        ├── Product_img_3.jpg   # Product gallery thumbnail 2
-        ├── Product_img_4.jpg   # Product gallery thumbnail 3 (lamp_pot)
-        └── Product_thumbnail.jpg # Catalog and related product preview image (bird_gift)
+        ├── Product_1.jpg       # Pack 1 main showcase image (Flower Pot Regular)
+        ├── Product_1_Desk.jpg  # Pack 1 desk thumbnail
+        ├── Product_1_Makro.jpg # Pack 1 macro thumbnail
+        ├── Product_1_Black.jpg # Pack 1 black background thumbnail
+        ├── Product_2.jpg       # Pack 2 main showcase image (Flower Bird Gift)
+        ├── Product_2_Desk.jpg  # Pack 2 desk thumbnail
+        ├── Product_2_Makro.jpg # Pack 2 macro thumbnail
+        ├── Product_2_Black.jpg # Pack 2 black background thumbnail
+        ├── Product_3.jpg       # Pack 3 main showcase image (Lamp Flower Pot)
+        ├── Product_3_Desk.jpg  # Pack 3 desk thumbnail
+        ├── Product_3_Makro.jpg # Pack 3 macro thumbnail
+        ├── Product_3_Black.jpg # Pack 3 black background thumbnail
+        ├── Product_img_4.jpg   # Product gallery legacy asset
+        └── Product_thumbnail.jpg # Catalog preview thumbnail
 ```
 
 ---
@@ -107,7 +130,7 @@ ReBloom Project Root
 ### 3.1 Landing Page Architecture (`index.html`)
 
 ```text
-Landing Page Architecture (index.html)
+Landing Page Architecture (index.html -> assets/js/script.js)
 ├── Fixed Navigation Header (.navbar)
 │   ├── Brand Cluster (.nav_left > a > .logo_img, .logo_txt)
 │   ├── Section Links (.nav_mid > li > .nav_link [Home, About, Product, FAQ, Contact])
@@ -117,177 +140,158 @@ Landing Page Architecture (index.html)
 │   └── Hero Container (.container.hero_container)
 │       ├── Dual-Layer Headline (.headline_wrapper > .hero_headline.hero_solid, .hero_headline.hero_outline)
 │       └── Three-Column Hero Grid (.hero_grid)
-│           ├── Left Copy (.hero_left > .hero_sub_title, .hero_desc)
-│           ├── Center Visual (.hero_center > .tulip_img + blurred #E3475D glow)
-│           └── Right Action (.hero_right > .btn.btn_primary.hero_cta_btn, .hero_desc.right_desc)
 │
 ├── Value Pillars Bar (.feat_wrap > .container.feat > .feat_bar)
-│   └── 4x Feature Items (.feat_item > .feat_icon, .feat_txt) separated by .feat_divider
-│
 ├── Vision & Mission Section (.vm_sec#vision > .container.vm_box)
 ├── About Origin Section (.about_sec#about > .container.about_box)
 ├── Why Choose Us Section (.why_sec > .container)
-│
 ├── Product Catalog Section (.prod_sec#products > .container)
-│   ├── Section Heading (.prod_heading)
-│   └── 3-Column Catalog Grid (.prod_grid > 3x .prod_card)
-│       ├── Card 1 (Flower Pot Regular -> product.html?pack=regular)
-│       ├── Card 2 (Flower Bird Gift -> product.html?pack=bird_gift)
-│       └── Card 3 (Lamp Flower Pot -> product.html?pack=lamp_pot)
-│
 ├── FAQ Accordion Section (.faq_sec#faq > .container)
-│   └── Accordion Items (.faq_box > 4x .faq_item > .faq_q, .faq_a [Item 1: Pre-Order COD])
-│
 ├── Contact Section (.contact_sec#contact > .container.contact_box)
-│   ├── Left Info (.contact_left > .contact_logo_box, .contact_title, .contact_wa_btn)
-│   └── Right Form (.contact_right > #contact_form)
-│
 └── Global Footer (.footer > .container > .footer_txt)
 ```
 
-### 3.2 Product Detail & Configurator Architecture (`product.html`)
+### 3.2 Product Detail & Configurator Architecture (`product.html`, `product_2.html`, `product_3.html`)
 
 ```text
-Product Detail & Configurator Architecture (product.html)
-├── Fixed Navigation Header (.navbar) [Shared with index.html]
-│
-├── Product Detail & Configurator Section (.prod_sec#product_detail > .container.prod_wrap)
-│   ├── Left Gallery Column (.prod_left)
-│   │   ├── Main Photo Stage (.prod_main_box > .prod_main_img#prod_main_img)
-│   │   └── Thumbnail Switcher Row (.prod_thumbs > 3x .prod_thumb > .prod_thumb_img)
-│   │
-│   └── Right Configurator Column (.prod_right)
-│       ├── Product Heading (.prod_title#prod_title)
-│       ├── Product Description (.prod_desc#prod_desc)
-│       ├── Review Rating Row (.prod_rating > .prod_stars [5x fa-star], .prod_rate_txt)
-│       ├── Interactive Customization Controls
-│       │   ├── Two-Column Customization Row (.custom_row)
-│       │   │   ├── Flower Color Selector (.color_sec > .custom_lbl, .swatch_grp > 4x .color_swatch)
-│       │   │   │   ├── Sky Blue (.swatch_blue [active])
-│       │   │   │   ├── Purple (.swatch_purple)
-│       │   │   │   ├── Orchid Pink (.swatch_orchid)
-│       │   │   │   └── Pastel Pink (.swatch_pink)
-│       │   │   └── Quantity Stepper Pill (.qty_sec > .custom_lbl, .qty_box > .qty_minus, .qty_val, .qty_plus)
-│       │   └── Special Request Note (.note_sec > .custom_lbl, #custom_note.note_inp)
-│       ├── Live Price Display (.prod_price_box > .price_curr ["Rp"], .price_val#price_val)
-│       ├── Security Trust Badge (.prod_sec_pay > .sec_pay_icon, .sec_pay_brand)
-│       └── Primary Checkout CTA (.btn.btn_primary.prod_buy_btn [BUY NOW])
-│
-├── Related Products Section (.rel_sec#related_products > .container.rel_wrap)
-│   ├── Left Recommendation Cards (.rel_left) [Dynamically rendered from pack_catalog]
-│   │   └── 2x .rel_card (.rel_img_box, .rel_card_title, .rel_card_rating, .rel_card_price, .rel_btn)
-│   └── Right Section Narrative (.rel_right > .rel_title, .rel_divider, .rel_desc)
-│
-├── Contact Section (.contact_sec#contact) [Shared with index.html]
-└── Global Footer (.footer) [Shared with index.html]
+Product Detail & Configurator Architecture (product*.html -> assets/js/product.js)
+├── Fixed Navigation Header (.navbar)
+├── Product Detail Section (.prod_sec#product_detail > .container.prod_wrap)
+│   ├── Left Column: Photo Stage & Gallery (.prod_left)
+│   │   ├── Stage Photo (#prod_main_img)
+│   │   └── Thumbnails (.prod_thumbs > 3x .prod_thumb > .prod_thumb_img)
+│   │       └── Farthest-Left Queue Rotation Algorithm (promotes clicked thumb, shifts old preview to index 0)
+│   └── Right Column: Dynamic Configurator Panel (.prod_right)
+│       ├── Title (#prod_title) & Description (#prod_desc)
+│       ├── Rating Row (.prod_rating)
+│       ├── Customization Row (.custom_row > .color_sec, .qty_sec)
+│       │   ├── 4x Swatches (Sky Blue, Purple, Orchid Pink, Pastel Pink)
+│       │   └── Stepper (- / qty_val / +)
+│       ├── Note Input (.note_sec > #custom_note.note_inp)
+│       ├── Live Price Display (.prod_price_box > .price_curr, #price_val)
+│       ├── Trust Badge (.prod_sec_pay)
+│       └── Buy Button (.prod_buy_btn [BUY NOW])
+├── Related Products Showcase (.rel_sec#related_products)
+│   └── 2x Related Cards (.rel_card > .rel_btn [Switch / Order Pack]) -> window.location.href
+├── Contact Section (.contact_sec#contact)
+└── Global Footer (.footer)
 ```
 
-### 3.3 Receipt Page Architecture (`receipt.html`)
+### 3.3 Shopping Cart & Receipt Page Architecture (`receipt.html`)
 
 ```text
-ReBloom Receipt Page Architecture (receipt.html)
+ReBloom Shopping Cart & Receipt Architecture (receipt.html -> assets/js/receipt.js)
 ├── Navigation Header (header > nav.navbar)
 │   ├── Brand Cluster (.nav_left > a > .logo_img, .logo_txt)
 │   ├── Menu Links (.nav_mid > li > .nav_link)
 │   └── Actions (.nav_right > .lang_switch, .btn_cart)
 │
-└── Main Layout Canvas (.rcpt_layout)
-    └── Two-Column Container (.rcpt_container)
-        ├── Left Column: Order Confirmation (.rcpt_status)
-        │   ├── Circular Status Badge (.status_badge > .badge_inner > .chk_icon)
-        │   ├── Status Headline (.status_title)
-        │   ├── Screenshot-Free Instruction Paragraph (.status_desc)
-        │   └── Action Buttons (.status_actions)
-        │       ├── Primary WhatsApp & Auto-Copy CTA (.btn_primary#btn_admin) [Send To Admin]
-        │       └── Outline Return CTA (.btn_outline#btn_back) [Back To Product > .btn_arrow]
+└── Main Layout Wrapper (.cart_page_wrapper)
+    └── Page Container (.cart_page_container)
+        ├── Cart Subheader Bar (.cart_header_bar)
+        │   ├── Left: Eyebrow (.cart_eyebrow) + Title (.cart_main_title)
+        │   └── Right: Review Count (.cart_review_text > #cart_count_highlight)
         │
-        └── Right Column: Dynamic Receipt Card (.rcpt_card)
-            ├── Card Title (.card_title ["Order Details"])
-            ├── Order Metadata (.order_info)
-            │   ├── Date & Time Group (.info_group > .info_label, .info_val [Real Timestamp])
-            │   └── Payment Method Group (.info_group > .info_label, .info_val ["Cash Only (Pre-Order COD)"])
-            ├── Dashed Divider (.divider_dash)
-            ├── Line Items Section (.items_sec)
-            │   ├── Section Header (.items_title ["Items Details"])
-            │   ├── Top Solid Divider (.divider_solid)
-            │   ├── Item Row (.item_row)
-            │   │   ├── Item Name (.item_name [<qty>x <pack_name>])
-            │   │   ├── Custom Note & Swatch Indicator (.prod_desc > .custom_dot, .custom_text)
-            │   │   └── Item Subtotal (.item_price [Calculated Total])
-            │   └── Bottom Solid Divider (.divider_solid)
-            └── Grand Total (.total_group > .total_label ["Total"], .total_val [Calculated Total])
+        ├── State 1: Empty Cart Section (#empty_cart_state)
+        │   └── Centered Card (.empty_cart_card)
+        │       ├── Icon Halo (.empty_icon_circle > fa-cart-shopping)
+        │       ├── Heading (.empty_title ["Your Cart is Empty"])
+        │       ├── Description (.empty_desc)
+        │       ├── Start Shopping CTA (.start_shopping_btn > fa-arrow-right)
+        │       └── Trust Note (.empty_trust_note > fa-shield-halved)
+        │
+        └── State 2: Populated Cart Section (#populated_cart_state)
+            └── Split Layout Grid (.cart_split_layout)
+                ├── Left Column: Cart Items (.cart_items_column)
+                │   ├── Dynamic Items Container (#cart_items_list)
+                │   │   └── Cart Item Cards (.cart_item_card)
+                │   │       ├── Thumbnail (.item_thumb)
+                │   │       ├── Delete Action (.item_delete_btn > fa-trash-can)
+                │   │       └── Details (.item_details)
+                │   │           ├── Category Pill (.item_tag_pill)
+                │   │           ├── Product Title (.item_title)
+                │   │           ├── Meta Row (.item_meta_row)
+                │   │           │   ├── Color Pill (.color_pill > .color_dot, color name)
+                │   │           │   └── Note Pill (.note_pill > .note_edit_btn) OR Inline Form (.note_edit_form)
+                │   │           └── Bottom Row (.item_bottom_row)
+                │   │               ├── Unit Price (.unit_price_block > .unit_price_label, .unit_price_val)
+                │   │               └── Stepper (.qty_stepper > .qty_btn_minus, .qty_value, .qty_btn_plus)
+                │   └── Continue Shopping Button (.continue_shopping_wrapper > .continue_shopping_btn)
+                │
+                └── Right Column: Order Summary (.order_summary_column)
+                    └── Sticky Summary Card (.order_summary_card)
+                        ├── Heading (.summary_heading ["Order Summary"])
+                        ├── Info Group (.summary_info_group)
+                        │   ├── Payment Method (.summary_info_row > label, value)
+                        │   ├── Delivery Mode (.summary_info_row > label, value)
+                        │   └── Order Date (.summary_info_row > label, #summary_order_date)
+                        ├── Dashed Divider (.summary_divider_dashed)
+                        ├── Summary Rows (.summary_rows)
+                        │   ├── Items Subtotal (#summary_item_count, #summary_subtotal_price)
+                        │   ├── Packaging Fee (.free_badge ["FREE"])
+                        │   └── Shipping Fee (.free_badge ["FREE (COD PICKUP)"])
+                        ├── Solid Divider (.summary_divider_solid)
+                        ├── Grand Total Row (.summary_total_row > #summary_grand_total)
+                        ├── COD Guarantee Banner (.cod_guarantee_box > fa-circle-check, text)
+                        ├── Checkout Button (#proceed_checkout_btn)
+                        └── Footnote (.checkout_footnote)
 ```
 
 ---
 
 ## 4. Layout Systems, Grid Mechanics & Responsive Breakpoints
 
-### 4.1 Global Containers & Layout Mechanics
-- **Primary Content Wrapper (`.container`)**: Constrains content width to `1200px` (`width: 100%`, `margin: 0 auto`, `padding: 0 20px`).
-- **Landing Page Grids (`assets/css/style.css`)**:
-  - `.hero_grid`: 3-column CSS Grid (`grid-template-columns: 1fr auto 1fr`).
-  - `.why_grid`: 2-column CSS Grid (`grid-template-columns: 1fr 1fr`, `gap: 40px 60px`).
-  - `.prod_grid`: 3-column CSS Grid (`grid-template-columns: repeat(3, 1fr)`, `gap: 30px`).
-- **Product Showcase & Configurator Layout (`assets/css/product.css`)**:
-  - `.prod_wrap`: 2-column Flexbox layout (`gap: 55px`, `width: 100%`) partitioning `.prod_left` gallery (`flex: 1`) and `.prod_right` configurator (`flex: 1.1`).
-  - `.custom_row`: 2-column Flexbox row pairing circular `.color_sec` swatches with `.qty_sec` pill stepper.
-  - `.rel_wrap`: 2-column Flexbox layout (`gap: 60px`) partitioning recommendation cards (`.rel_left`, `flex: 1.1`) and narrative copy (`.rel_right`, `flex: 0.9`).
-- **Receipt Canvas (`assets/css/receipt.css`)**:
-  - `.rcpt_layout`: Viewport-centering flex container (`min-height: 100vh`, `padding: 60px 24px`, `background-color: #F5F6F8`).
-  - `.rcpt_container`: 2-column horizontal flexbox (`max-width: 960px`, `gap: 50px`) pairing `.rcpt_status` and `.rcpt_card`.
+### 4.1 Split Layout Grid Mechanics (`assets/css/receipt.css`)
+- **Cart Split Grid (`.cart_split_layout`)**:
+  - `display: grid; grid-template-columns: 1.35fr 1fr; gap: 32px; align-items: flex-start;`
+  - Allows the cart items list to comfortably occupy the wider primary area, while the summary card stays anchored in the complementary column.
+- **Sticky Column (`.order_summary_column`)**:
+  - `position: sticky; top: 100px;` ensuring seamless accessibility during long cart reviews.
 
 ### 4.2 Responsive Breakpoints Matrix
 | Breakpoint | Target Scope | Structural Transformations |
 | :--- | :--- | :--- |
-| **`<= 1200px`** | `style.css` | Scales `.hero_headline` from `160px` down to `130px`. |
-| **`<= 992px`** | `style.css`, `product.css` | Collapses `.hero_grid`, `.why_grid`, and `.prod_grid` to `1fr`. Stacks `.vm_box`, `.about_box`, `.contact_box`, `.feat_bar`, and `.prod_wrap` vertically (`flex-direction: column`). Inverts `.rel_wrap` order (`flex-direction: column-reverse`). |
-| **`<= 860px`** | `receipt.css` | Hides `.nav_mid` links on receipt navbar. Transitions `.rcpt_container` from 2 columns to a single-column vertical stack (`flex-direction: column`, `gap: 40px`) with `100%` width on status and receipt cards. |
-| **`<= 768px`** | `product.css` | Scales `#product_detail .prod_title` to `34px`, `.price_val` to `42px`, and stacks `.rel_left` related cards vertically. |
-| **`<= 576px`** | `style.css` | Hides center navigation links (`.nav_mid`), scales `.hero_headline` to `64px`, and scales section titles to `30px`. |
-| **`<= 480px`** | `receipt.css`, `product.css` | Compacts `.navbar` padding (`14px 16px`), `.rcpt_card` padding (`24px 20px`), `.status_title` font size (`20px`), full-width `.status_actions`, and single-column collapse for `.custom_row`. |
+| **`> 900px`** | `receipt.css` | 2-column split layout (`1.35fr 1fr`), sticky order summary, full navigation links. |
+| **`<= 900px`** | `receipt.css` | Collapses `.cart_split_layout` to single column (`1fr`). `.order_summary_column` becomes `position: static`. Hides `.nav_mid` links. |
+| **`<= 576px`** | `receipt.css` | Cart item cards stack vertically (`flex-direction: column`). Thumbnail expands to full width (`100%`, `180px`). Padding compacts. |
 
 ---
 
-## 5. Client-Side Runtime & State Architecture (`assets/js/script.js`)
+## 5. Client-Side Runtime & Decoupled Script Architecture
 
-All client-side application logic is contained in `assets/js/script.js` and initialized on `DOMContentLoaded`:
+To eliminate cross-page dead code and prevent double-bound event listeners, JavaScript controllers are strictly decoupled into a 1-to-1 page-to-script architecture:
 
-1. **Pack Catalog Contract (`pack_catalog`)**:
-   - Dictionary storing `regular` (`Rp 10.000`), `bird_gift` (`Rp 12.000`), and `lamp_pot` (`Rp 15.000`) with exact titles, descriptions, numeric unit prices, and imagery.
-2. **URL-Based Pack Routing & Sync**:
-   - Reads `?pack=` on `product.html` load, defaulting to `regular` if missing or invalid.
-   - Synchronizes product heading (`#prod_title`), description (`#prod_desc`), primary image (`#prod_main_img`), and unit price.
-   - Updates `window.history.pushState` when switching packs via related products and listens to `popstate` events.
-3. **Dynamic Related Products Generator**:
-   - Filters the catalog to find the two inactive packs and dynamically renders `.rel_card` elements with `Switch / Order Pack` buttons.
-4. **Live Price Calculation**:
-   - Computes `unit_price * quantity` and updates `#price_val` on quantity increment/decrement and pack switching.
-5. **Color Swatch Interaction**:
-   - Supports 4 swatches (Sky Blue `#0084FF`, Purple `#A855F7`, Orchid Pink `#E199D2`, Pastel Pink `#F5B0C4`).
-   - Toggles `.active` styling and captures `data-color` and `data-hex`.
-6. **Pre-Order State Persistence (`sessionStorage`)**:
-   - On `.prod_buy_btn` click, packages order details into `rebloom_order` and navigates to `receipt.html`.
-7. **Receipt Dynamic Hydration**:
-   - Reads `sessionStorage.getItem('rebloom_order')` in `receipt.html`.
-   - Hydrates timestamp, payment method (`Cash Only (Pre-Order COD)`), line item title (`<qty>x <pack_name>`), color dot hex, formatted note, item price, and total amount.
-8. **Automated Clipboard Copy & WhatsApp Handoff**:
-   - Constructs structured plain-text receipt summary `wa_message`.
-   - Copies `wa_message` to clipboard via `navigator.clipboard.writeText()` and redirects to `https://wa.me/6282132829795?text=...` with visual feedback ("Receipt Copied! Opening WhatsApp...").
+### 5.1 Landing Page Controller (`assets/js/script.js` -> `index.html` ONLY)
+Contains strictly scoped Landing Page features initialized on `DOMContentLoaded`:
+1. **Language Switcher (`.lang_switch .lang_btn`)**: Switches active language toggle between `IDN` and `ENG`.
+2. **Navbar Scroll Spy (`section[id]`, `.nav_link`)**: Updates active anchor states as the user scrolls.
+3. **FAQ Accordion (`.faq_item`, `.faq_q`, `.faq_icon`)**: Single-open interactive accordion with chevron glyph toggling.
+4. **Contact Form (`#contact_form`)**: Client-side inquiry submission interceptor and alert.
+
+### 5.2 Product Configurator Controller (`assets/js/product.js` -> `product.html`, `product_2.html`, `product_3.html`)
+Contains all product-specific logic initialized on `DOMContentLoaded`:
+1. **Master Catalog Contract (`pack_catalog`)**: Definitions for `regular` (`Rp 10.000`, `product.html`), `bird_gift` (`Rp 12.000`, `product_2.html`), and `lamp_pot` (`Rp 15.000`, `product_3.html`) with standardized 4-photo gallery sets.
+2. **Farthest-Left Queue Rotation Gallery Swapper**: Promotes clicked thumbnail to `#prod_main_img` and shifts previous main preview into the farthest-left slot (`thumb_imgs[0]`), sliding intermediate thumbnails to the right with a 150ms opacity transition.
+3. **Multi-Page Routing & Navigation**: Evaluates pathname or `?pack=` query param to initialize pack state, and navigates across dedicated pages (`product.html`, `product_2.html`, `product_3.html`) via `window.location.href = target_pack.page_url`.
+4. **Related Products Switcher**: Dynamically renders alternative packs with `.rel_btn` calling `switch_active_pack`.
+5. **Color Swatch Selection**: Toggles active selection among 4 floral swatches.
+6. **Quantity Stepper & Live Pricing**: Bound stepper with minimum limit 1 and live IDR formatting.
+7. **Cart Persistence & Buy Action**: Appends or increments item in `localStorage` under `rebloom_cart`, stores `sessionStorage` fallback under `rebloom_order`, and redirects to `receipt.html`.
+8. **Shared Utilities**: Page-scoped language toggle and contact form handler.
+
+### 5.3 Shopping Cart & Receipt Controller (`assets/js/receipt.js` -> `receipt.html` ONLY)
+Dedicated shopping cart and WhatsApp pre-order controller initialized on `DOMContentLoaded`:
+1. **`localStorage` State Persistence**: Reads and updates `rebloom_cart` array with legacy single-item migration fallback.
+2. **Two-State Dynamic Hydration**: Dispatches `#empty_cart_state` when empty, or renders `#populated_cart_state` with live card items.
+3. **Quantity Steppers & Removal**: Live increment, decrement (auto-delete at 0), and trash icon removal.
+4. **Inline Customer Note Editing**: Interactive form toggling with checkmark save and cancel.
+5. **Real-Time Recalculations**: Subtotals, grand total, and currency formatting (`Rp XX.000` / `Rp XX.000,00`).
+6. **WhatsApp Pre-Order COD Checkout**: Itemizes cart contents into pre-formatted message, copies to clipboard, and opens `https://wa.me/6282132829795`.
 
 ---
 
 ## 6. External Asset, Typography & Styling Pipeline
-- **Hardcoded CSS Policy**: Strictly zero `:root` declarations and zero `var(--...)` custom properties across `style.css`, `product.css`, and `receipt.css`. Hex colors and dimensions are hardcoded directly into rules:
-  - Primary Brand Crimson: `#E3475D` (Hover: `#cc374c`, Tints: `#FFF0F2`, `#FDE8EC`, `#FCE8EE`).
-  - Secondary Eco Green: `#24CC63` (Ring: `#DDF5E6`).
-  - Secondary Pastel Pink: `#F5B0C4`.
-  - Swatch Purple: `#A855F7`.
-  - Swatch Orchid Pink: `#E199D2`.
-  - Swatch Sky Blue: `#0084FF`.
-  - Review Star Gold: `#FBBF24`.
-  - Neutrals: `#1E1E1E` (Headings/Active), `#5A5A5A` / `#6E6E6E` (Muted), `#FFFFFF` (Surfaces), `#F5F6F8` (Receipt Canvas), `#F7F4ED` (Image Stage), `#EAEAEA` (Borders).
-- **Typography Pipeline**:
-  - **Brand Wordmark & Accent**: `'Telma', cursive, serif` (weights `300, 400, 500, 700`) via Fontshare CDN.
-  - **Primary UI & Body**: `'Figtree', sans-serif` (weights `300..900`) via Google Fonts CDN.
-- **Iconography Pipeline**:
-  - **Font Awesome 6.4.0** loaded globally. Inline `<svg>` tags are strictly forbidden across all HTML files.
+- **Fontshare CDN**: Font `Telma` (`weights 300, 400, 500, 700`).
+- **Google Fonts CDN**: Font `Figtree` (`weights 400, 500, 600, 700, 800`).
+- **Font Awesome CDN (v6.4.0)**: Icons for cart (`fa-cart-shopping`), trash (`fa-trash-can`), arrows (`fa-arrow-right`, `fa-arrow-left`), checkmarks (`fa-circle-check`, `fa-check`), cancel (`fa-xmark`), pen (`fa-pen-to-square`), and shield (`fa-shield-halved`).
+- **Zero CSS Variables**: Hardcoded color hexes and dimensions throughout.

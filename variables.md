@@ -267,12 +267,14 @@
 | `buy_btn` | `script.js` | Buy Button Element | DOM reference to `.prod_buy_btn`. |
 | `color_swatches` | `script.js` | Swatches NodeList | DOM NodeList of `.color_swatch` buttons. |
 | `rel_container` | `script.js` | Related Container Element | DOM reference to `#related_products .rel_left`. |
-| `active_pack_key` | `script.js` | Active Pack Key String | Tracks currently active pack key (`regular`, `bird_gift`, `lamp_pot`). |
-| `get_current_qty` | `script.js` | Quantity Reader Helper | Reads and parses integer from `.qty_val` with minimum 1 fallback. |
-| `update_price_display` | `script.js` | Price Display Updater | Recalculates `unit_price * quantity` and updates `#price_val`. |
-| `render_related_packs` | `script.js` | Related Packs Renderer | Populates `.rel_left` with the two inactive catalog packs. |
-| `render_pack_details` | `script.js` | Pack Details Renderer | Updates title, description, image, and price for the active pack. |
-| `switch_active_pack` | `script.js` | Pack Switcher Function | Updates active pack, pushes history state, re-renders, and scrolls smoothly. |
+| `active_pack_key` | `product.js` | Active Pack Key String | Tracks currently active pack key (`regular`, `bird_gift`, `lamp_pot`). |
+| `get_initial_pack_key` | `product.js` | Initial Pack Key Resolver | Reads URL query param `?pack=` or URL pathname to resolve initial active pack. |
+| `init_gallery_swapper` | `product.js` | Gallery Swapper Initializer | Binds farthest-left queue rotation listener to `.prod_thumb` elements. |
+| `get_current_qty` | `product.js` | Quantity Reader Helper | Reads and parses integer from `.qty_val` with minimum 1 fallback. |
+| `update_price_display` | `product.js` | Price Display Updater | Recalculates `unit_price * quantity` and updates `#price_val`. |
+| `render_related_packs` | `product.js` | Related Packs Renderer | Populates `.rel_left` with the two inactive catalog packs. |
+| `render_pack_details` | `product.js` | Pack Details Renderer | Updates title, description, 4-photo gallery, and price for the active pack. |
+| `switch_active_pack` | `product.js` | Pack Switcher Function | Performs full page navigation via `window.location.href = target_pack.page_url`. |
 | `rebloom_order` | `script.js` | Order Payload Record | JSON payload serialized into `sessionStorage` under `rebloom_order`. |
 | `rcpt_card` | `script.js` | Receipt Card Reference | DOM element reference to `.rcpt_card` on receipt page. |
 | `stored_order_data` | `script.js` | Raw Stored Order String | Raw JSON string retrieved from `sessionStorage.getItem('rebloom_order')`. |
@@ -287,3 +289,99 @@
 | `wa_message` | `script.js` | Formatted WhatsApp Payload | Plain-text receipt summary formatted for WhatsApp and clipboard copy. |
 | `wa_encoded` | `script.js` | Encoded WhatsApp URL String | URI-encoded message string appended to WhatsApp click-to-chat API. |
 | `wa_url` | `script.js` | WhatsApp Direct URL String | Full WhatsApp link with prefilled message. |
+
+---
+
+## 8. Shopping Cart & Receipt Page Identifiers (`receipt.html`, `receipt.css`, `receipt.js`)
+
+| Identifier | File Source | Full Meaning | Function & Purpose |
+| :--- | :--- | :--- | :--- |
+| `cart_page_wrapper` | `receipt.html`, `receipt.css` | Cart Page Wrapper | Main layout container padding top for fixed header and framing cart views. |
+| `cart_page_container` | `receipt.html`, `receipt.css` | Cart Page Container | Width-constrained flex/grid content container max 1200px. |
+| `cart_header_bar` | `receipt.html`, `receipt.css` | Cart Header Bar | Horizontal subheader bar with bottom border framing cart title and item count. |
+| `cart_header_left` | `receipt.html`, `receipt.css` | Cart Header Left | Flex cluster for eyebrow label and main title. |
+| `cart_eyebrow` | `receipt.html`, `receipt.css` | Cart Eyebrow Label | Uppercase crimson bold tag "ECO-FRIENDLY & HANDMADE". |
+| `cart_main_title` | `receipt.html`, `receipt.css` | Cart Main Title | 32px bold title "Your Cart". |
+| `cart_header_right` | `receipt.html`, `receipt.css` | Cart Header Right | Container aligning live item review count to the right. |
+| `cart_review_text` | `receipt.html`, `receipt.css` | Cart Review Text | Descriptive label "Reviewing X items selected for checkout". |
+| `cart_count_highlight` | `receipt.html`, `receipt.css`, `receipt.js` | Cart Count Highlight ID | Bold crimson span displaying dynamic total items in cart. |
+| `empty_cart_state` | `receipt.html`, `receipt.js` | Empty Cart State ID | Section displayed when cart array contains zero items. |
+| `empty_cart_section` | `receipt.html`, `receipt.css` | Empty Cart Section | Class defining 100% width container for empty state card. |
+| `empty_cart_card` | `receipt.html`, `receipt.css` | Empty Cart Card | Centered 480px white card with soft shadow and rounded corners. |
+| `empty_icon_circle` | `receipt.html`, `receipt.css` | Empty Icon Halo | 64px soft pink disc framing crimson cart glyph icon. |
+| `empty_title` | `receipt.html`, `receipt.css` | Empty Cart Title | 24px bold heading "Your Cart is Empty". |
+| `empty_desc` | `receipt.html`, `receipt.css` | Empty Cart Description | 14px muted explanation encouraging user to browse products. |
+| `start_shopping_btn` | `receipt.html`, `receipt.css` | Start Shopping Button | Crimson pill button routing to product catalog. |
+| `empty_trust_note` | `receipt.html`, `receipt.css` | Empty Trust Note | Security reassurance badge pairing green shield with COD copy. |
+| `populated_cart_state` | `receipt.html`, `receipt.js` | Populated Cart State ID | Section displayed when cart array contains 1 or more items. |
+| `populated_cart_section` | `receipt.html`, `receipt.css` | Populated Cart Section | Class defining layout wrapper for active cart view. |
+| `cart_split_layout` | `receipt.html`, `receipt.css` | Cart Split Layout | Responsive 2-column CSS Grid (1.35fr 1fr) collapsing below 900px. |
+| `cart_items_column` | `receipt.html`, `receipt.css` | Cart Items Column | Left column container for cart items list and continue shopping action. |
+| `cart_items_list` | `receipt.html`, `receipt.css`, `receipt.js` | Cart Items List ID | Dynamic container element populated with individual item cards. |
+| `cart_item_card` | `receipt.html`, `receipt.css`, `receipt.js` | Cart Item Card | Elevated white card displaying item thumbnail, metadata, and controls. |
+| `item_thumb` | `receipt.html`, `receipt.css`, `receipt.js` | Item Thumbnail Image | 110px x 110px product photo thumbnail with rounded corners. |
+| `item_details` | `receipt.html`, `receipt.css`, `receipt.js` | Item Details Column | Flex container organizing title, category, meta row, and bottom pricing. |
+| `item_top_row` | `receipt.html`, `receipt.css`, `receipt.js` | Item Top Row | Cluster organizing category badge, product title, and options. |
+| `item_tag_pill` | `receipt.html`, `receipt.css`, `receipt.js` | Category Tag Pill | Soft pink badge displaying "Recycled Plastic" or "Handcrafted". |
+| `item_title` | `receipt.html`, `receipt.css`, `receipt.js` | Item Title Heading | 18px bold product title. |
+| `item_meta_row` | `receipt.html`, `receipt.css`, `receipt.js` | Item Meta Row | Horizontal flex row pairing color pill and customer note. |
+| `color_pill` | `receipt.html`, `receipt.css`, `receipt.js` | Selected Color Pill | Bordered capsule displaying circular color dot and color name. |
+| `color_dot` | `receipt.html`, `receipt.css`, `receipt.js` | Color Indicator Dot | 8px circular dot filled with item's hex color. |
+| `note_pill` | `receipt.html`, `receipt.css`, `receipt.js` | Customer Note Pill | Capsule displaying customer request note or "Note: None". |
+| `note_pill_text` | `receipt.html`, `receipt.css`, `receipt.js` | Note Pill Text | Ellipsis-truncated text element for customer note display. |
+| `note_edit_btn` | `receipt.html`, `receipt.css`, `receipt.js` | Note Edit Button | Icon button triggering inline note edit form. |
+| `note_edit_form` | `receipt.html`, `receipt.css`, `receipt.js` | Note Edit Form | Inline form container with input, save, and cancel actions. |
+| `note_edit_input` | `receipt.html`, `receipt.css`, `receipt.js` | Note Edit Input | Text input capturing inline customer note edits. |
+| `note_save_btn` | `receipt.html`, `receipt.css`, `receipt.js` | Note Save Button | Green checkmark button saving note edits to localStorage. |
+| `note_cancel_btn` | `receipt.html`, `receipt.css`, `receipt.js` | Note Cancel Button | Muted xmark button canceling inline note edits. |
+| `item_delete_btn` | `receipt.html`, `receipt.css`, `receipt.js` | Item Delete Button | Trash icon button positioned top-right to remove item from cart. |
+| `item_bottom_row` | `receipt.html`, `receipt.css`, `receipt.js` | Item Bottom Row | Divided bottom row holding unit price block and quantity stepper. |
+| `unit_price_block` | `receipt.html`, `receipt.css`, `receipt.js` | Unit Price Block | Flex container organizing unit price label and numeral. |
+| `unit_price_label` | `receipt.html`, `receipt.css` | Unit Price Label | 11px uppercase muted label "Unit Price". |
+| `unit_price_val` | `receipt.html`, `receipt.css`, `receipt.js` | Unit Price Value | 15px bold numeral formatted as integer Rupiah. |
+| `qty_stepper` | `receipt.html`, `receipt.css`, `receipt.js` | Quantity Stepper Pill | Bordered capsule enclosing decrement, quantity value, and increment buttons. |
+| `qty_btn_minus` | `receipt.html`, `receipt.css`, `receipt.js` | Quantity Minus Button | Soft pink circular button decrementing item quantity. |
+| `qty_value` | `receipt.html`, `receipt.css`, `receipt.js` | Quantity Numeral Display | Numeric text element reflecting item quantity. |
+| `qty_btn_plus` | `receipt.html`, `receipt.css`, `receipt.js` | Quantity Plus Button | Soft green circular button incrementing item quantity. |
+| `continue_shopping_wrapper` | `receipt.html`, `receipt.css` | Continue Shopping Wrapper | Container spacing the continue shopping button. |
+| `continue_shopping_btn` | `receipt.html`, `receipt.css` | Continue Shopping Button | Outline pill button linking back to catalog. |
+| `order_summary_column` | `receipt.html`, `receipt.css` | Order Summary Column | Right sticky column holding order summary card. |
+| `order_summary_card` | `receipt.html`, `receipt.css` | Order Summary Card | 20px rounded white card displaying summary details. |
+| `summary_heading` | `receipt.html`, `receipt.css` | Summary Card Heading | 20px bold title "Order Summary". |
+| `summary_info_group` | `receipt.html`, `receipt.css` | Summary Info Group | Flex container grouping payment method, delivery mode, and date. |
+| `summary_info_row` | `receipt.html`, `receipt.css` | Summary Info Row | Key-value vertical pairing for summary metadata. |
+| `summary_info_label` | `receipt.html`, `receipt.css` | Summary Info Label | 11px uppercase label for metadata fields. |
+| `summary_info_val` | `receipt.html`, `receipt.css` | Summary Info Value | 14px bold text for metadata values. |
+| `summary_order_date` | `receipt.html`, `receipt.js` | Summary Order Date ID | Dynamic element receiving real-time formatted order timestamp. |
+| `summary_divider_dashed` | `receipt.html`, `receipt.css` | Dashed Summary Divider | 1px dashed separation line. |
+| `summary_rows` | `receipt.html`, `receipt.css` | Summary Rows Container | Container spacing itemized subtotal and fee rows. |
+| `summary_row` | `receipt.html`, `receipt.css` | Summary Line Row | Justified row pairing label and price/badge. |
+| `summary_row_label` | `receipt.html`, `receipt.css` | Summary Row Label | Label for subtotal, packaging, or shipping fees. |
+| `summary_row_val` | `receipt.html`, `receipt.css` | Summary Row Value | Numeric price text for line items. |
+| `summary_item_count` | `receipt.html`, `receipt.js` | Summary Item Count ID | Span reflecting total quantity count in subtotal label. |
+| `summary_subtotal_price` | `receipt.html`, `receipt.js` | Summary Subtotal ID | Span reflecting calculated subtotal in IDR format. |
+| `free_badge` | `receipt.html`, `receipt.css` | Free Fee Badge | Soft green pill badge reading "FREE". |
+| `summary_divider_solid` | `receipt.html`, `receipt.css` | Solid Summary Divider | 1px solid horizontal separation line. |
+| `summary_total_row` | `receipt.html`, `receipt.css` | Summary Grand Total Row | Horizontal row highlighting grand total label and price. |
+| `summary_total_label` | `receipt.html`, `receipt.css` | Summary Total Label | 16px bold label "Total". |
+| `summary_total_val` | `receipt.html`, `receipt.css` | Summary Total Numeral | 24px bold numeral element for grand total. |
+| `summary_grand_total` | `receipt.html`, `receipt.js` | Summary Grand Total ID | Span displaying final grand total amount. |
+| `cod_guarantee_box` | `receipt.html`, `receipt.css` | COD Guarantee Box | Soft green bordered banner with checkmark and guarantee copy. |
+| `cod_guarantee_icon` | `receipt.html`, `receipt.css` | COD Guarantee Icon | Font Awesome circle checkmark icon in eco green. |
+| `cod_guarantee_text` | `receipt.html`, `receipt.css` | COD Guarantee Text | Bold green text "Secure Pre-Order COD By ReBloom". |
+| `proceed_checkout_btn` | `receipt.html`, `receipt.css`, `receipt.js` | Proceed Checkout Button ID | Full-width crimson pill button dispatching WhatsApp checkout. |
+| `checkout_footnote` | `receipt.html`, `receipt.css` | Checkout Footnote | Muted 12px notice on WhatsApp admin order confirmation. |
+| `footer_bar` | `receipt.html`, `receipt.css` | Footer Bar | Full-width clean white footer bar. |
+| `footer_container` | `receipt.html`, `receipt.css` | Footer Container | Centered container for footer copyright text. |
+| `footer_copy` | `receipt.html`, `receipt.css` | Footer Copy Text | Copyright text string for ReBloom. |
+| `cart_storage_key` | `receipt.js` | Cart Storage Key Constant | Constant "rebloom_cart" referencing localStorage array. |
+| `legacy_order_key` | `receipt.js` | Legacy Order Key Constant | Constant "rebloom_order" referencing sessionStorage single order. |
+| `admin_whatsapp_phone` | `receipt.js` | Admin Phone Constant | Admin phone string "6282132829795" for WhatsApp handoff. |
+| `get_cart_items` | `receipt.js` | Cart Items Getter | Reads and parses cart array from localStorage with legacy migration. |
+| `save_cart_items` | `receipt.js` | Cart Items Setter | Serializes and saves cart array to localStorage under rebloom_cart. |
+| `update_cart_quantity` | `receipt.js` | Quantity Updater | Increases or decreases item quantity, pruning at 0. |
+| `remove_cart_item` | `receipt.js` | Item Remover | Deletes item matching ID from cart array and updates state. |
+| `update_cart_note` | `receipt.js` | Note Updater | Saves edited customer note string to cart item in localStorage. |
+| `render_cart_view` | `receipt.js` | Cart View Dispatcher | Evaluates cart length and hydrates empty or populated cart view. |
+| `format_currency_unit` | `receipt.js` | Unit Currency Formatter | Formats number to "Rp XX.000" integer currency format. |
+| `format_currency_summary` | `receipt.js` | Summary Currency Formatter | Formats number to "Rp XX.000,00" comma-cents currency format. |

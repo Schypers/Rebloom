@@ -3,115 +3,182 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ReBloom - Order Receipt</title>
-  <meta name="description" content="Order completion and receipt confirmation for ReBloom handcrafted eco-friendly floral decorations.">
+  <title>ReBloom - Shopping Cart &amp; Order Receipt</title>
+  <meta name="description" content="Review your shopping cart, manage handcrafted recycled floral decor items, and proceed to WhatsApp Pre-Order COD checkout.">
   <link rel="icon" type="image/png" href="assets/images/Logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://api.fontshare.com/v2/css?f[]=telma@300,400,500,700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="assets/css/receipt.css">
 </head>
 <body>
 
-<header>
-  <nav  class="navbar">
-        <div class="nav_left">
-            <a href="index.html#home">
-                <img src="assets/images/Logo.png" alt="ReBloom Logo" class="logo_img">
-                <span class="logo_txt">ReBloom</span>
-            </a>
+  <!-- Top Navigation Bar -->
+  <header>
+    <nav class="navbar">
+      <div class="nav_left">
+        <a href="index.html#home">
+          <img src="assets/images/Logo.png" alt="ReBloom Logo" class="logo_img">
+          <span class="logo_txt">ReBloom</span>
+        </a>
+      </div>
+
+      <ul class="nav_mid">
+        <li><a href="index.html#home" class="nav_link">Home</a></li>
+        <li><a href="index.html#about" class="nav_link">About</a></li>
+        <li><a href="product.html" class="nav_link">Product</a></li>
+        <li><a href="index.html#faq" class="nav_link">FAQ</a></li>
+        <li><a href="index.html#contact" class="nav_link">Contact</a></li>
+      </ul>
+
+      <div class="nav_right">
+        <div class="lang_switch">
+          <button type="button" class="lang_btn active" data-lang="idn">IDN</button>
+          <button type="button" class="lang_btn" data-lang="eng">ENG</button>
         </div>
-        
-        <ul class="nav_mid">
-            <li><a href="index.html#home" class="nav_link active">Home</a></li>
-            <li><a href="index.html#about" class="nav_link">About</a></li>
-            <li><a href="product.html" class="nav_link">Product</a></li>
-            <li><a href="index.html#faq" class="nav_link">FAQ</a></li>
-            <li><a href="index.html#contact" class="nav_link">Contact</a></li>
-        </ul>
-        
-        <div class="nav_right">
-            <div class="lang_switch">
-                <button type="button" class="lang_btn active">IDN</button>
-                <button type="button" class="lang_btn">ENG</button>
-            </div>
-            <a href="#" class="btn_cart" aria-label="Shopping Cart">
-              <i class="fa-solid fa-cart-shopping cart_icon"></i>
-              <span>Cart</span>
-            </a>
-        </div>
+        <a href="receipt.html" class="btn_cart" aria-label="Shopping Cart">
+          <i class="fa-solid fa-cart-shopping cart_icon"></i>
+          <span>Cart</span>
+        </a>
+      </div>
     </nav>
-</header>
+  </header>
 
-  <!-- Main Content Layout -->
-  <main class="rcpt_layout">
-    <div class="rcpt_container">
-      
-      <section class="rcpt_status">
-        <div class="status_badge" aria-hidden="true">
-          <div class="badge_inner">
-            <i class="fa-solid fa-check chk_icon"></i>
-          </div>
+  <!-- Main Shopping Cart Wrapper -->
+  <main class="cart_page_wrapper">
+    <div class="cart_page_container">
+
+      <!-- Subheader Bar -->
+      <section class="cart_header_bar" aria-label="Cart Header">
+        <div class="cart_header_left">
+          <span class="cart_eyebrow">ECO-FRIENDLY &amp; HANDMADE</span>
+          <h1 class="cart_main_title">Your Cart</h1>
         </div>
-
-        <h1 class="status_title">Your Order Is Being Processed!</h1>
-        <p class="status_desc">Thank you for your purchase! No screenshot needed—just click 'Send To Admin' to automatically copy your ready-to-paste order receipt and send it via WhatsApp.</p>
-
-        <div class="status_actions">
-          <a href="https://wa.me/6282132829795" target="_blank" rel="noopener noreferrer" class="btn_primary" id="btn_admin">
-            Send To Admin
-          </a>
-          <a href="product.html" class="btn_outline" id="btn_back">
-            <span>Back To Product</span>
-            <i class="fa-solid fa-arrow-right btn_arrow" aria-hidden="true"></i>
-          </a>
+        <div class="cart_header_right">
+          <p class="cart_review_text">
+            Reviewing <span id="cart_count_highlight">0 items</span> selected for checkout
+          </p>
         </div>
       </section>
 
-      
-      <aside class="rcpt_card" aria-label="Order Receipt Details">
-        <h2 class="card_title">Order Details</h2>
-
-        <div class="order_info">
-          <div class="info_group">
-            <span class="info_label">Order Date &amp; Time</span>
-            <span class="info_val">12 Oct 2026, 09.00 AM</span>
+      <!-- 1. Empty Cart State (Active when cart has 0 items) -->
+      <section id="empty_cart_state" class="empty_cart_section" style="display: none;">
+        <div class="empty_cart_card">
+          <div class="empty_icon_circle" aria-hidden="true">
+            <i class="fa-solid fa-cart-shopping"></i>
           </div>
-
-          <div class="info_group">
-            <span class="info_label">Payment Method</span>
-            <span class="info_val">Cash Only (Pre-Order COD)</span>
+          <h2 class="empty_title">Your Cart is Empty</h2>
+          <p class="empty_desc">
+            Looks like you haven't added any handcrafted floral pieces to your cart yet. Explore our sustainable collection to find your favorite.
+          </p>
+          <a href="product.html" class="start_shopping_btn">
+            <span>Start Shopping</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </a>
+          <div class="empty_trust_note">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Secure Pre-Order COD &amp; WhatsApp Confirmation Available</span>
           </div>
         </div>
+      </section>
 
-        <hr class="divider_dash">
+      <!-- 2. Populated Cart State (Active when cart has 1+ items) -->
+      <section id="populated_cart_state" class="populated_cart_section" style="display: none;">
+        <div class="cart_split_layout">
 
-        <div class="items_sec">
-          <h3 class="items_title">Items Details</h3>
-          <hr class="divider_solid">
-
-          <div class="item_row">
-            <span class="item_name">1x Regular Pack</span>
-            <div class="prod_desc">
-              <span class="custom_dot" aria-hidden="true"></span>
-              <span class="custom_text">Sky Blue (No custom note)</span>
+          <!-- Left Column: Cart Items -->
+          <div class="cart_items_column">
+            <div id="cart_items_list" class="cart_items_list">
+              <!-- Dynamically hydrated by assets/js/receipt.js -->
             </div>
-            <span class="item_price">Rp 10.000,00</span>
-          </div>
-          <hr class="divider_solid">
-        </div>
 
-        <div class="total_group">
-          <span class="total_label">Total</span>
-          <span class="total_val">Rp 10.000,00</span>
+            <div class="continue_shopping_wrapper">
+              <a href="product.html" class="continue_shopping_btn">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Continue Shopping</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Right Column: Order Summary -->
+          <aside class="order_summary_column" aria-label="Order Summary">
+            <div class="order_summary_card">
+              <h2 class="summary_heading">Order Summary</h2>
+
+              <div class="summary_info_group">
+                <div class="summary_info_row">
+                  <span class="summary_info_label">PAYMENT METHOD</span>
+                  <span class="summary_info_val">Cash Only (Pre-Order COD)</span>
+                </div>
+                <div class="summary_info_row">
+                  <span class="summary_info_label">DELIVERY MODE</span>
+                  <span class="summary_info_val">Direct Handover / WhatsApp Scheduled</span>
+                </div>
+                <div class="summary_info_row">
+                  <span class="summary_info_label">ORDER DATE</span>
+                  <span class="summary_info_val" id="summary_order_date">-</span>
+                </div>
+              </div>
+
+              <div class="summary_divider_dashed"></div>
+
+              <div class="summary_rows">
+                <div class="summary_row">
+                  <span class="summary_row_label">
+                    Items Subtotal (<span id="summary_item_count">0</span> items)
+                  </span>
+                  <span class="summary_row_val" id="summary_subtotal_price">Rp 0,00</span>
+                </div>
+
+                <div class="summary_row">
+                  <span class="summary_row_label">Packaging &amp; Recycling Fee</span>
+                  <span class="free_badge">FREE</span>
+                </div>
+
+                <div class="summary_row">
+                  <span class="summary_row_label">Shipping Fee</span>
+                  <span class="free_badge">FREE (COD PICKUP)</span>
+                </div>
+              </div>
+
+              <div class="summary_divider_solid"></div>
+
+              <div class="summary_total_row">
+                <span class="summary_total_label">Total</span>
+                <span class="summary_total_val" id="summary_grand_total">Rp 0,00</span>
+              </div>
+
+              <div class="cod_guarantee_box">
+                <i class="fa-solid fa-circle-check cod_guarantee_icon"></i>
+                <span class="cod_guarantee_text">Secure Pre-Order COD By ReBloom</span>
+              </div>
+
+              <button type="button" id="proceed_checkout_btn" class="proceed_checkout_btn">
+                <span>Proceed to Checkout</span>
+                <i class="fa-solid fa-arrow-right"></i>
+              </button>
+
+              <p class="checkout_footnote">
+                Orders are confirmed directly with our admin via WhatsApp upon checkout.
+              </p>
+            </div>
+          </aside>
+
         </div>
-      </aside>
+      </section>
 
     </div>
   </main>
 
-  <script src="assets/js/script.js"></script>
+  <!-- Clean Footer Bar -->
+  <footer class="footer_bar">
+    <div class="footer_container">
+      <p class="footer_copy">&copy; 2026 ReBloom. All Rights Reserved. Creative Handicrafts &amp; Sustainable Decor.</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/receipt.js"></script>
 </body>
 </html>

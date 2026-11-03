@@ -6,16 +6,19 @@
 - **Commerce & Checkout Flow**: Strictly **Pre-Order** and **Cash on Delivery (COD) / Cash Only** with direct admin confirmation via WhatsApp (`6282132829795`):
   1. **Landing & Discovery (`index.html`)**: Showcases brand story, sustainability mission, and the three-pack catalog grid (`Flower Pot Regular` at `Rp 10.000`, `Flower Bird Gift` at `Rp 12.000`, and `Lamp Flower Pot` at `Rp 15.000`) routing via `?pack=...`.
   2. **Product Configurator (`product.html`)**: Allows users to inspect product photography, select from four circular **Flower Color** swatches (Sky Blue, Purple, Orchid Pink, Pastel Pink), adjust item **Quantity** via a pill stepper (`-` / `qty_val` / `+`) with live price calculation, enter an optional custom **Note**, and trigger checkout (`BUY NOW`).
-  3. **Order Receipt & WhatsApp Handoff (`receipt.html`)**: Displays the itemized dynamic order summary (with custom color dot `.custom_dot` and customer request note `.custom_text`) and enables one-click clipboard copy + WhatsApp handoff without requiring screenshots.
-- **Visual Aesthetic**: Clean, airy, modern botanical e-commerce UI combining crisp white surfaces (`#FFFFFF`), soft warm studio photography containers (`#F7F4ED`), expressive script accents (`Telma`), and high-contrast crimson calls-to-action (`#E3475D`).
+  3. **Shopping Cart & Order Receipt (`receipt.html`)**: Presents a responsive two-state cart experience:
+     - **Empty Cart State (`#empty_cart_state`)**: Displayed when the cart contains zero items. Features a soft pink circular cart badge, bold heading `"Your Cart is Empty"`, descriptive copy, a pill-shaped `"Start Shopping"` CTA button, and a green COD trust guarantee.
+     - **Populated Cart State (`#populated_cart_state`)**: Responsive split layout with dynamic cart items on the left (thumbnails, tags, color pills, editable notes, trash delete buttons, unit prices, quantity steppers, and continue shopping button) and a sticky Order Summary card on the right (payment method, delivery mode, real-time order date, subtotal, free fee badges, grand total, green COD guarantee box, and WhatsApp Pre-Order checkout trigger).
+- **Visual Aesthetic**: Clean, airy, modern botanical e-commerce UI combining crisp white surfaces (`#ffffff`), soft warm studio photography containers (`#f8f8f8`), expressive script accents (`Telma`), and high-contrast crimson calls-to-action (`#e03e52`).
 
 ---
 
 ## 2. Strict Frontend Architectural Invariants
 All UI/UX implementations across the ReBloom codebase must obey the following non-negotiable engineering rules:
 1. **Zero CSS Custom Properties**: Strictly **NO** `:root` declarations and **NO** `var(--...)` functions in `style.css`, `product.css`, or `receipt.css`. Every hex code, pixel dimension, and font family must be hardcoded directly onto its target CSS selector rule.
-2. **Strict `snake_case` Naming**: Every HTML `class`, HTML `id`, data attribute (`data-*`), and JavaScript identifier must use lowercase `snake_case` (e.g., `.btn_cart`, `.color_swatch`, `.swatch_purple`, `.qty_btn`, `#custom_note`, `#prod_title`).
-3. **Font Awesome 6.4.0 Icons Only**: All icons must use Font Awesome 6.4.0 classes (`<i class="fa-solid ..."></i>` or `<i class="fa-brands ..."></i>`). Inline `<svg>` elements are strictly prohibited.
+2. **Strict `snake_case` Naming**: Every HTML `class`, HTML `id`, data attribute (`data-*`), and JavaScript identifier must use lowercase `snake_case` (e.g., `.cart_page_wrapper`, `.empty_cart_card`, `.cart_item_card`, `.qty_stepper`, `.order_summary_card`, `.proceed_checkout_btn`). Standard Font Awesome classes (e.g., `fa-solid`, `fa-cart-shopping`) retain their official syntax.
+3. **Font Awesome 6.4.0 Icons Only**: All icons must use Font Awesome 6.4.0 classes (`<i class="fa-solid ..."></i>`, `<i class="fa-regular ..."></i>`, or `<i class="fa-brands ..."></i>`). Inline `<svg>` elements are strictly prohibited.
+4. **Zero Backend Dependencies**: All cart persistence is maintained in `localStorage` under `rebloom_cart`, with checkout dispatching directly to WhatsApp (`6282132829795`).
 
 ---
 
@@ -24,27 +27,30 @@ All UI/UX implementations across the ReBloom codebase must obey the following no
 ### 3.1 Core Brand Palette
 | Role (Indonesian / English) | Hex Code | Usage & Component Binding |
 | :--- | :--- | :--- |
-| **Warna Utama** (Primary Brand Crimson) | `#E3475D` | Primary brand wordmark (`.logo_txt`, `.brand_name`), highlighted title words (`.hl_red`), active nav links (`.nav_link.active`), active language toggle (`.lang_btn.active`), price displays (`.price_curr`, `.price_val`, `.price_val_sm`), and ambient background blur glows. |
-| **Warna Pendukung 1** (Secondary Eco Green) | `#24CC63` | Feature bar icons (`.feat_icon`), security shield icon (`.sec_pay_icon`), quantity increment `+` button text (`.qty_plus`), order receipt confirmation disc (`.badge_inner`), and WhatsApp direct CTA (`.contact_wa_btn`). |
-| **Warna Pendukung 2** (Secondary Pastel Pink) | `#F5B0C4` | Secondary brand pink accent, decorative highlights, and soft floral pink color swatch option (`.swatch_pink`). |
-| **Warna Button** (Primary CTA Fill) | `#E3475D` | Primary action buttons (`.btn_primary`, `.prod_buy_btn`, `.rel_btn`, `.btn_cart`, `.contact_submit_btn`) and quantity decrement `-` button text (`.qty_minus`). |
+| **Warna Utama** (Primary Brand Crimson) | `#e03e52` | Primary brand wordmark (`.logo_txt`), highlighted titles, active nav links, eyebrow tags (`.cart_eyebrow`), cart count highlight (`#cart_count_highlight`), primary CTA buttons (`.btn_cart`, `.start_shopping_btn`, `.proceed_checkout_btn`), and quantity decrement button (`.qty_btn_minus`). |
+| **Primary Button Hover** | `#c83244` | Hover state background on `.start_shopping_btn`, `.proceed_checkout_btn`, and `.btn_cart`. |
+| **Warna Pendukung 1** (Secondary Eco Green) | `#1bb55c` | Success green icons (`.empty_trust_note i`, `.cod_guarantee_icon`), quantity increment `+` button text (`.qty_btn_plus`), fee badges (`.free_badge`), and inline note save button (`.note_save_btn`). |
+| **COD Banner Text** | `#15803d` | High-contrast green text inside the COD guarantee container (`.cod_guarantee_text`). |
+| **Green Soft Fill** | `#eafaf1` | Background fill for `.free_badge`, `.cod_guarantee_box`, and `.qty_btn_plus`. |
+| **Green Soft Border** | `#c8f0d8` | Subtle border around `.cod_guarantee_box`. |
+| **Soft Pink Badge Fill** | `#fdecef` | Background fill for `.empty_icon_circle`, category tag badges (`.item_tag_pill`), and quantity decrement button (`.qty_btn_minus`). |
+| **Page Canvas Background** | `#f6f6f6` | Viewport canvas background for `receipt.html`. |
+| **Card Surface** | `#ffffff` | Elevated cards (`.empty_cart_card`, `.cart_item_card`, `.order_summary_card`, `.navbar`, `.footer_bar`). |
+| **Card Border** | `#eeeeee` | 1px clean container border on cards and dividers. |
+| **Card Shadow** | `0 8px 24px rgba(0, 0, 0, 0.04)` | Ambient drop shadow elevating cards from the canvas. |
 
-### 3.2 Extended Surface, Swatch & Neutral Palette
+### 3.2 Extended Typography & Swatch Palette
 | Category | Hex Code | Usage & Component Binding |
 | :--- | :--- | :--- |
-| **Primary Button Hover** | `#cc374c` | Hover state background on `.btn_primary`, `.prod_buy_btn`, `.rel_btn`, `.btn_cart`, and `.contact_submit_btn`. |
-| **Pastel Pink Surface Tints** | `#FDE8EC` / `#FCE8EE` / `#FFF0F2` | `.prod_thumb_circle` icon disc (`#FDE8EC`), `.rel_img_box` background (`#FCE8EE`), and `.btn_outline:hover` background wash (`#FFF0F2`). |
-| **Confirmation Badge Ring** | `#DDF5E6` | Outer circular halo `.status_badge` framing the `#24CC63` checkmark disc on `receipt.html`. |
-| **Flower Swatch: Sky Blue** | `#0084FF` | Primary blue swatch (`.swatch_blue`, active default) and dynamic customization indicator dot (`.custom_dot`) on `receipt.html`. |
-| **Flower Swatch: Purple** | `#A855F7` | Vibrant purple flower swatch (`.swatch_purple`) for customizable bouquets. |
-| **Flower Swatch: Orchid Pink** | `#E199D2` | Medium orchid pink floral swatch (`.swatch_orchid`). |
-| **Flower Swatch: Pastel Pink** | `#F5B0C4` | Soft pastel pink floral swatch (`.swatch_pink`). |
-| **Review Star Gold** | `#FBBF24` | 5-star product rating icons (`.prod_stars`, `.rel_card_rating`) on `product.html`. |
-| **Primary Dark Typography** | `#1E1E1E` / `#333333` | Headings, active labels, body copy, and selected swatch outer border ring (`2px solid #1E1E1E`). |
-| **Secondary Muted Typography** | `#5A5A5A` / `#6E6E6E` | Supporting descriptions, captions, metadata labels (`.info_label`), and form placeholders. |
-| **Primary Canvas & Card Surface** | `#FFFFFF` | Main page background (`index.html`, `product.html`), elevated cards (`.prod_card`, `.rcpt_card`), and header bars. |
-| **Secondary Viewport / Stage Surfaces** | `#F5F6F8` / `#F7F4ED` / `#F4F4F4` | Receipt page background (`#F5F6F8`), product image gallery frame (`#F7F4ED`), and contact form input fill (`#F4F4F4`). |
-| **Borders & Dividers** | `#EAEAEA` | Card borders, navbar bottom border, `.lang_switch` border, quantity pill border, note input border, `.divider_dash`, and `.divider_solid`. |
+| **Primary Dark Typography** | `#1a1a1a` | Headings, active labels, product titles (`.item_title`), and grand total prices. |
+| **Secondary Muted Typography** | `#757575` / `#888888` | Supporting descriptions (`.empty_desc`), metadata labels (`.unit_price_label`, `.summary_info_label`), and footnotes (`.checkout_footnote`). |
+| **Flower Swatch: Sky Blue** | `#0084FF` | Sky blue swatch indicator (`.color_dot`) and catalog selection. |
+| **Flower Swatch: Purple** | `#A855F7` | Vibrant purple flower swatch option. |
+| **Flower Swatch: Orchid Pink** | `#E199D2` | Medium orchid pink floral swatch option. |
+| **Flower Swatch: Pastel Pink** | `#F5B0C4` | Soft pastel pink floral swatch indicator (`.color_dot`). |
+| **Review Star Gold** | `#FBBF24` | 5-star product rating icons on `product.html`. |
+| **Dashed Divider** | `#e0e0e0` | 1px dashed separation line in Order Summary (`.summary_divider_dashed`). |
+| **Subheader Divider** | `#e5e5e5` | 1px solid horizontal border below cart subheader (`.cart_header_bar`). |
 
 ---
 
@@ -52,84 +58,102 @@ All UI/UX implementations across the ReBloom codebase must obey the following no
 
 ### 4.1 Font Families
 1. **Font Utama (Expressive Brand & Script Accent)**: `'Telma', cursive, serif` (imported via Fontshare CDN: `weights 300, 400, 500, 700`).
-   - **Application**: Brand wordmarks (`.logo_txt`, `.brand_name`, `.contact_logo_txt`), hero accent word (`.hero_finest`), and trust badge wordmark (`.sec_pay_brand`).
-2. **Font Pendukung (Primary UI, Headings & Body Copy)**: `'Figtree', sans-serif` (imported via Google Fonts CDN: `weights 300..900`).
-   - **Application**: Global `body` typography, navigation links, section headings, product configurator labels, price numerals, receipt data, and buttons.
+   - **Application**: Brand wordmark (`.logo_txt`).
+2. **Font Pendukung (Primary UI, Headings & Body Copy)**: `'Figtree', sans-serif` (imported via Google Fonts CDN: `weights 400..800`).
+   - **Application**: Global `body` typography, navigation links, section titles, product cards, order summary, buttons, and numeric price displays.
 
-### 4.2 Core Typographic Scale
-- **Judul (Standard Section Heading)**: `40px` (`font-weight: 800`, `color: #1E1E1E`, `line-height: 1.2`) — Applied to `.about_title`, `.why_heading`, `.prod_heading`, and `.faq_heading`.
-- **Keterangan (Base Body & Description)**: `20px` (`font-weight: 400`, `line-height: 1.6`, `color: #333333`) — Global `body` baseline in `style.css`.
-- **Component-Specific Display & UI Exceptions**:
-  - **Hero Display Headline (`.hero_headline`)**: `160px` (`font-weight: 750`, `letter-spacing: -3px`, dual-layer solid `#1E1E1E` + `1px` outline stroke).
-  - **Product Configurator Title (`#product_detail .prod_title`)**: `46px` (`font-weight: 800`, `color: #1E1E1E`).
-  - **Product Configurator Price (`.price_val`)**: `56px` (`font-weight: 900`, `color: #E3475D`) paired with `28px` `.price_curr` (`"Rp"`).
-  - **Configurator Sub-Labels (`Flower Color`, `Quantity`, `Note`)**: `18px` (`font-weight: 700`, `color: #1E1E1E`).
-
----
-
-## 5. Core UI Component Specifications
-
-### 5.1 Navigation Header & Pending Purchases Cart Button
-- **Header Layout (`.navbar`)**: Sticky/fixed top navigation bar with brand identity on the left (`.logo_img` + `.logo_txt` in `Telma` `#E3475D`), section links in the center (`Home`, `About`, `Product`, `FAQ`, `Contact`), and utility actions on the right.
-- **Language Switcher (`.lang_switch`)**: Pill container (`border: 1.5px solid #EAEAEA`, `border-radius: 30px`, `background-color: #FFFFFF`) holding `IDN` and `ENG` toggle buttons (`.lang_btn`), where `.lang_btn.active` is filled with `#E3475D` and `#FFFFFF` text.
-- **Cart Button (`.btn_cart`)**: Inline-flex pill (`background-color: #E3475D`, `color: #FFFFFF`, `padding: 13px 18px`, `border-radius: 50px`, `font-size: 14px`, `font-weight: 600`) containing `<i class="fa-solid fa-cart-shopping cart_icon"></i>` and `<span>Cart</span>`.
-
-### 5.2 Product Configurator (`product.html`)
-The right column (`.prod_right`) of `#product_detail` follows the official ReBloom configurator design:
-1. **Product Title & Description**:
-   - Bold pack title `.prod_title#prod_title` (dynamically rendered from catalog: `Flower Pot Regular`, `Flower Bird Gift`, or `Lamp Flower Pot`).
-   - Warm descriptive paragraph `.prod_desc#prod_desc` detailing the authentic recycled plastic craftsmanship and custom options.
-2. **Rating Summary Row (`.prod_rating`)**:
-   - 5 solid gold stars (`.prod_stars` in `#FBBF24`) followed by `.prod_rate_txt` (`"5.0 | 12 Reviews"`).
-3. **Interactive Customization Row (`.custom_row`)**:
-   - Two-column horizontal flex row (`justify-content: space-between`, `align-items: flex-start`):
-     - **Left — Flower Color Swatch Selector (`.color_sec`)**:
-       - Label `.custom_lbl`: `"Flower Color"` (`font-weight: 700`, `color: #1E1E1E`).
-       - Swatch Group `.swatch_grp`: 4 circular color buttons `.color_swatch` (`width: 32px`, `height: 32px`, `border-radius: 50%`):
-         - Sky Blue (`#0084FF`, `.swatch_blue`)
-         - Purple (`#A855F7`, `.swatch_purple`)
-         - Orchid Pink (`#E199D2`, `.swatch_orchid`)
-         - Pastel Pink (`#F5B0C4`, `.swatch_pink`)
-       - Active state: `border: 2px solid #1E1E1E; box-shadow: inset 0 0 0 2px #FFFFFF;`.
-     - **Right — Quantity Stepper (`.qty_sec`)**:
-       - Label `.custom_lbl`: `"Quantity"`.
-       - Pill Stepper `.qty_box`:
-         - Decrement `.qty_btn.qty_minus` (`-` in crimson `#E3475D`).
-         - Value Display `.qty_val` (`1` in bold `#1E1E1E`, minimum 1).
-         - Increment `.qty_btn.qty_plus` (`+` in eco green `#24CC63`).
-4. **Custom Request Note Input (`.note_sec`)**:
-   - Label `.custom_lbl`: `"Note"`.
-   - Input Field `#custom_note.note_inp`: Rounded rectangle input with placeholder `"Have a special request? Leave a note for our admin."`.
-5. **Live Price Display, Trust Badge & Primary Buy CTA**:
-   - **Price Display (`.prod_price_box`)**: `"Rp"` (`.price_curr`) + dynamic price (`#price_val.price_val`) in `#E3475D`.
-   - **Trust Badge (`.prod_sec_pay`)**: Green shield icon (`#24CC63`) + `"Secure Payment By ReBloom"`.
-   - **Primary CTA Button (`.prod_buy_btn`)**: Full-width crimson pill button (`border-radius: 50px`, `background-color: #E3475D`, `color: #FFFFFF`, `padding: 16px`, `font-weight: 700`) labeled `"BUY NOW"`.
-
-### 5.3 Order Receipt & WhatsApp Handoff (`receipt.html`)
-- **Two-Column Canvas (`.rcpt_layout` > `.rcpt_container`)**: Centered inside a `#F5F6F8` viewport with a `50px` gap between columns.
-- **Left Status Column (`.rcpt_status`)**:
-  - Mint outer ring `.status_badge` (`44px`, `#DDF5E6`) + green inner disc `.badge_inner` (`22px`, `#24CC63`) + white checkmark `.chk_icon`.
-  - Headline `.status_title` (`"Your Order Is Being Processed!"`).
-  - Screenshot-Free Instruction Copy `.status_desc` (`"Thank you for your purchase! No screenshot needed—just click 'Send To Admin' to automatically copy your ready-to-paste order receipt and send it via WhatsApp."`).
-  - Action Stack `.status_actions`:
-    - `#btn_admin.btn_primary` (`"Send To Admin"`): Copies formatted plain-text receipt to clipboard and opens `https://wa.me/6282132829795?text=...` with feedback.
-    - `#btn_back.btn_outline` (`"Back To Product"` + `fa-arrow-right`).
-- **Right Receipt Card (`.rcpt_card`)**:
-  - Elevated white card (`max-width: 440px`, `border-radius: 24px`, `border: 1px solid #EAEAEA`, `padding: 36px`).
-  - Displays dynamic `Order Date & Time`, `Payment Method` (`Cash Only (Pre-Order COD)`), dashed divider `.divider_dash`, `Items Details` row showing `<Quantity>x <Pack Name>`, custom color dot `.custom_dot` (colored to matching hex) + `.custom_text` note, unit/subtotal `.item_price`, and calculated grand total `.total_val`.
+### 4.2 Typographic Hierarchy
+- **Cart Page Title (`.cart_main_title`)**: `32px` (`font-weight: 800`, `color: #1a1a1a`, `line-height: 1.2`).
+- **Eyebrow Label (`.cart_eyebrow`)**: `12px` (`font-weight: 800`, `letter-spacing: 1.5px`, `text-transform: uppercase`, `color: #e03e52`).
+- **Empty State Heading (`.empty_title`)**: `24px` (`font-weight: 800`, `color: #1a1a1a`).
+- **Order Summary Heading (`.summary_heading`)**: `20px` (`font-weight: 800`, `color: #1a1a1a`).
+- **Item Title (`.item_title`)**: `18px` (`font-weight: 700`, `color: #1a1a1a`).
+- **Grand Total Numerals (`#summary_grand_total`)**: `24px` (`font-weight: 800`, `color: #1a1a1a`).
+- **Cart Unit Price (`.unit_price_val`)**: `15px` (`font-weight: 700`, `color: #1a1a1a`).
+- **Footnote / Small Meta (`.checkout_footnote`, `.empty_trust_note`)**: `12px` (`font-weight: 400`, `color: #888888`).
 
 ---
 
-## 6. Responsive Breakpoints & Layout Grid
-1. **Desktop (`> 992px`)**:
-   - `.container`: `max-width: 1200px`, centered with `20px` horizontal padding.
-   - `product.html`: 2-column `.prod_wrap` (`gap: 55px`) with gallery (`flex: 1`) and configurator (`flex: 1.1`).
-   - `receipt.html`: 2-column `.rcpt_container` (`max-width: 960px`, `gap: 50px`).
-2. **Tablet (`<= 992px` / `<= 860px`)**:
-   - Multi-column flex/grid layouts collapse to single-column vertical stacks (`flex-direction: column`).
-   - `.rel_wrap` uses `flex-direction: column-reverse`.
-   - `.rcpt_container` stacks `.rcpt_status` above `.rcpt_card` at `100%` width.
-   - `.nav_mid` navigation menu collapses on mobile.
-3. **Mobile (`<= 576px` / `<= 480px`)**:
-   - `.custom_row` collapses vertically.
-   - Compact card padding (`24px 20px`) and full-width action buttons.
+## 5. Dual-State Shopping Cart Component Specifications
+
+### 5.1 Shared Navigation & Subheader Bar
+- **Top Navigation (`.navbar`)**: Fixed header with brand logo on the left, centered navigation anchors, and right utilities:
+  - Language toggle pill (`.lang_switch > .lang_btn` for `IDN` and `ENG`).
+  - Active solid crimson Cart button (`.btn_cart` with `<i class="fa-solid fa-cart-shopping"></i>` and `"Cart"`).
+- **Cart Subheader Bar (`.cart_header_bar`)**: Horizontal row bounded by `border-bottom: 1px solid #e5e5e5;`:
+  - Left: `.cart_eyebrow` (`"ECO-FRIENDLY & HANDMADE"`) + `.cart_main_title` (`"Your Cart"`).
+  - Right: `.cart_review_text` (`"Reviewing <span id="cart_count_highlight">X items</span> selected for checkout"`).
+
+### 5.2 Empty Cart State (`#empty_cart_state`)
+- Displayed when `cart.length === 0`.
+- **Card (`.empty_cart_card`)**: Centered white card (`max-width: 480px`, `border-radius: 20px`, `padding: 56px 40px`, `box-shadow: 0 8px 24px rgba(0,0,0,0.04)`).
+- **Icon Halo (`.empty_icon_circle`)**: `64px x 64px` circular badge (`background-color: #fdecef`, `color: #e03e52`, containing `fa-cart-shopping`).
+- **Title (`.empty_title`)**: `"Your Cart is Empty"`.
+- **Description (`.empty_desc`)**: `"Looks like you haven't added any handcrafted floral pieces to your cart yet. Explore our sustainable collection to find your favorite."`
+- **Call-to-Action (`.start_shopping_btn`)**: Pill button (`background-color: #e03e52`, `color: #ffffff`, `border-radius: 999px`, `padding: 14px 34px`) linking to `product.html`.
+- **Trust Note (`.empty_trust_note`)**: Green shield icon (`fa-shield-halved` in `#1bb55c`) with `"Secure Pre-Order COD & WhatsApp Confirmation Available"`.
+
+### 5.3 Populated Cart State (`#populated_cart_state`)
+- Displayed when `cart.length > 0`.
+- **Layout Grid (`.cart_split_layout`)**: `grid-template-columns: 1.35fr 1fr; gap: 32px;` (collapses to single column `<= 900px`).
+
+#### Left Column: Cart Items (`.cart_items_column`)
+- **Cart Item Card (`.cart_item_card`)**:
+  - Elevated card (`background-color: #ffffff`, `border-radius: 16px`, `border: 1px solid #eeeeee`, `padding: 20px`, `display: flex`, `gap: 20px`, `position: relative`).
+  - **Thumbnail (`.item_thumb`)**: `110px x 110px`, `border-radius: 12px`, `object-fit: cover`.
+  - **Category Pill (`.item_tag_pill`)**: Soft pink pill (`#fdecef`, `#e03e52`) displaying `"Recycled Plastic"` or `"Handcrafted"`.
+  - **Product Title (`.item_title`)**: Pack name in `18px`, `font-weight: 700`.
+  - **Metadata Row (`.item_meta_row`)**:
+    - **Color Pill (`.color_pill`)**: Bordered white pill with circular color swatch dot (`.color_dot`) and color name.
+    - **Customer Note (`.note_pill`)**: Displays `Note: None` or `Note: <custom_note>` with an edit icon button (`.note_edit_btn`). Clicking toggles into an inline `.note_edit_form` with a text input, save checkmark, and cancel button for immediate `localStorage` updates.
+  - **Delete Button (`.item_delete_btn`)**: Positioned at top-right with `fa-trash-can` (`#888888`, hover `#e03e52`).
+  - **Bottom Row (`.item_bottom_row`)**: Divided by `border-top: 1px solid #f2f2f2;`:
+    - **Unit Price Block (`.unit_price_block`)**: Label `"Unit Price"` (`11px`, `#888888`) and price numeral in IDR format (e.g., `"Rp 15.000"`).
+    - **Quantity Stepper (`.qty_stepper`)**: Pill container holding:
+      - Decrement (`.qty_btn_minus`): Soft pink circle (`#fdecef`, `#e03e52`).
+      - Value (`.qty_value`): Bold text (`14px`, `#1a1a1a`).
+      - Increment (`.qty_btn_plus`): Soft green circle (`#eafaf1`, `#1bb55c`).
+- **Continue Shopping Button (`.continue_shopping_btn`)**: Outline pill button (`border: 1px solid #333333`, `border-radius: 999px`, `padding: 12px 24px`) displaying `<i class="fa-solid fa-arrow-left"></i> Continue Shopping`.
+
+#### Right Column: Order Summary (`.order_summary_card`)
+- **Card Surface**: White card (`border-radius: 20px`, `padding: 32px`, `border: 1px solid #eeeeee`, `position: sticky; top: 100px;`).
+- **Heading (`.summary_heading`)**: `"Order Summary"`.
+- **Payment & Delivery Information (`.summary_info_group`)**:
+  - `PAYMENT METHOD`: `"Cash Only (Pre-Order COD)"`.
+  - `DELIVERY MODE`: `"Direct Handover / WhatsApp Scheduled"`.
+  - `ORDER DATE`: Real-time order timestamp (`#summary_order_date`).
+- **Dashed Divider (`.summary_divider_dashed`)**: `1px dashed #e0e0e0;`.
+- **Subtotal & Fee Rows (`.summary_rows`)**:
+  - `Items Subtotal (X items)`: Calculated total formatted as `"Rp 25.000,00"`.
+  - `Packaging & Recycling Fee`: Green badge `<span class="free_badge">FREE</span>` (`#eafaf1` / `#1bb55c`).
+  - `Shipping Fee`: Green badge `<span class="free_badge">FREE (COD PICKUP)</span>`.
+- **Solid Divider (`.summary_divider_solid`)**: `1px solid #eeeeee;`.
+- **Grand Total Row (`.summary_total_row`)**:
+  - Label: `"Total"` (`16px`, `700`).
+  - Numeral: Dynamic value in `24px`, `800` (`#summary_grand_total`).
+- **COD Guarantee Banner (`.cod_guarantee_box`)**: Soft green box (`#eafaf1`, `border: 1px solid #c8f0d8`, `border-radius: 12px`, `padding: 12px 16px`) pairing checkmark icon (`#1bb55c`) and bold text `"Secure Pre-Order COD By ReBloom"` (`#15803d`).
+- **Primary Checkout Button (`#proceed_checkout_btn`)**: Full-width crimson pill (`background-color: #e03e52`, `color: #ffffff`, `padding: 16px`, `border-radius: 999px`, `font-weight: 700`) reading `"Proceed to Checkout <i class="fa-solid fa-arrow-right"></i>"`.
+- **Checkout Footnote (`.checkout_footnote`)**: Centered text (`12px`, `#888888`) stating `"Orders are confirmed directly with our admin via WhatsApp upon checkout."`.
+
+---
+
+## 6. Currency Formatting Rules
+- **Item Unit Price (`.unit_price_val`)**: Formatted as integer currency without fractional cents:
+  - Example: `Rp 10.000`, `Rp 12.000`, `Rp 15.000`.
+- **Order Summary Subtotal & Grand Total (`#summary_subtotal_price`, `#summary_grand_total`)**: Formatted with standard Indonesian comma separators and `,00` suffix:
+  - Example: `Rp 25.000,00`.
+
+---
+
+## 7. Responsive Breakpoints & Layout Mechanics
+1. **Desktop (`> 900px`)**:
+   - Split layout: `grid-template-columns: 1.35fr 1fr; gap: 32px;`.
+   - Right column `.order_summary_column` uses `position: sticky; top: 100px;`.
+2. **Tablet & Mobile (`<= 900px`)**:
+   - Layout collapses to single column: `grid-template-columns: 1fr;`.
+   - `.order_summary_column` becomes `position: static;`.
+   - `.nav_mid` centers menu is hidden for streamlined viewport real estate.
+3. **Small Mobile (`<= 576px`)**:
+   - `.cart_item_card` switches to vertical column layout (`flex-direction: column`).
+   - `.item_thumb` expands to `100%` width with `height: 180px`.
+   - Card padding reduces to `24px 18px` for comfortable compact screens.

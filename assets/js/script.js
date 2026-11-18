@@ -1,7 +1,7 @@
-// Inisialisasi seluruh skrip interaktif setelah dokumen HTML selesai dimuat.
+// Menjalankan script setelah HTML selesai dimuat.
 document.addEventListener("DOMContentLoaded", () => {
 
-  // Kamus data terjemahan multibahasa untuk konten teks dalam Bahasa Inggris dan Bahasa Indonesia.
+  // Kamus data terjemahan untuk konten teks dalam Bahasa Inggris dan Bahasa Indonesia.
   const landing_translations = {
     ENG: {
       nav_home: "Home",
@@ -172,18 +172,17 @@ document.addEventListener("DOMContentLoaded", () => {
     },
   };
 
-  // Mengambil preferensi bahasa pengguna dari localStorage atau mengembalikan bahasa Inggris sebagai default.
+  // Mengecek bahasa pengguna dari localStorage atau mengembalikan bahasa Inggris sebagai default.
   function get_saved_lang() {
     const saved_lang = localStorage.getItem("rebloom_lang");
     return saved_lang === "IDN" || saved_lang === "ENG" ? saved_lang : "ENG";
   }
 
-  // Menerapkan teks terjemahan ke seluruh elemen antarmuka yang memiliki atribut i18n.
+  // Menerapkan teks terjemahan ke seluruh halaman.
   function apply_page_translation(target_lang) {
     const translations =
       landing_translations[target_lang] || landing_translations.ENG;
-
-
+    // Mengecek satu per satu elemen yang punya atribut data-i18n dan mengganti kontennya dengan terjemahan yang sesuai.
     const translatable_elements = document.querySelectorAll("[data-i18n]");
     translatable_elements.forEach((element) => {
       const key = element.getAttribute("data-i18n");
@@ -198,7 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-
+    // mengecek untuk translate elemen placeholder yg ada data-i18n-placeholder.
     const placeholder_elements = document.querySelectorAll(
       "[data-i18n-placeholder]"
     );
@@ -240,8 +239,7 @@ document.addEventListener("DOMContentLoaded", () => {
       lang_buttons.forEach((btn) => {
         btn.addEventListener("click", () => {
           const selected_lang =
-            btn.getAttribute("data-lang") ||
-            btn.textContent.trim().toUpperCase();
+            btn.getAttribute("data-lang") || btn.textContent.trim().toUpperCase();
           set_active_lang(selected_lang);
         });
       });
@@ -251,7 +249,7 @@ document.addEventListener("DOMContentLoaded", () => {
     set_active_lang(initial_lang);
   }
 
-  // Inisialisasi pendeteksi navigasi aktif berdasarkan posisi gulir jendela browser.
+  // untuk mendeteksi navigasi aktif pas saat posisi gulir jendela browser.
   const nav_sections = document.querySelectorAll("section[id]");
   const nav_links = document.querySelectorAll(".nav_link");
 
@@ -266,8 +264,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const section_height = section.offsetHeight;
 
         if (
-          scroll_position >= section_top &&
-          scroll_position < section_top + section_height
+          scroll_position >= section_top && scroll_position < section_top + section_height
         ) {
           current_section_id = section.getAttribute("id");
         }
@@ -315,9 +312,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Penanganan pengiriman formulir kontak yang dialihkan langsung menuju pesan WhatsApp admin.
-  // ==========================================
-  // WhatsApp Contact Form Handoff Handler
-  // ==========================================
   const contact_form = document.getElementById("contact_form");
   const admin_wa_number = "6282132829795";
 

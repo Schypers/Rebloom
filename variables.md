@@ -18,12 +18,17 @@
 | Identifier | File Source | Full Meaning | Function & Purpose |
 | :--- | :--- | :--- | :--- |
 | `navbar` | `index.html`, `product.html`, `receipt.html`, `style.css`, `receipt.css` | Fixed Navigation Bar | Full-width fixed top header with semi-transparent frosted background and subtle shadow. |
+| `nav_container` | `index.html`, `product.html`, `receipt.html`, `style.css` | Navigation Inner Container | Constrains navbar inner width up to `--container_max` and applies `--container_gutter` padding for pixel-perfect vertical alignment with content below. |
 | `nav_left` | `index.html`, `product.html`, `receipt.html`, `style.css`, `receipt.css` | Navigation Left Cluster | Left alignment wrapper grouping brand logo image and wordmark anchor. |
 | `logo_img` | `index.html`, `product.html`, `receipt.html`, `style.css`, `receipt.css` | Logo Graphic Image | Brand mark image asset constrained to 44px height. |
 | `logo_txt` | `index.html`, `product.html`, `receipt.html`, `style.css`, `receipt.css` | Brand Wordmark Text | Cursive brand name rendered in 'Telma' font styled in crimson `#E3475D`. |
-| `nav_mid` | `index.html`, `product.html`, `receipt.html`, `style.css`, `receipt.css` | Navigation Center Menu | Horizontally centered menu holding primary page section anchor links. |
+| `nav_menu_btn` | `index.html`, `product.html`, `receipt.html`, `style.css` | Mobile Navigation Toggle Button | Accessible button (`aria-expanded`, `aria-label`) toggling mobile navigation drawer. |
+| `is_open` | `style.css`, `script.js`, `product.js`, `receipt.js` | Mobile Drawer Open State | Modifier class toggling visibility and dropdown animation of `.nav_mid` on mobile viewports. |
+| `nav_mid` | `index.html`, `product.html`, `receipt.html`, `style.css`, `receipt.css` | Navigation Center Menu | Horizontally centered menu holding primary page section anchor links (drawer on mobile). |
+| `nav_lang_item` | `index.html`, `product.html`, `receipt.html`, `style.css` | Mobile Drawer Language Item | List item holding the language switcher toggle inside `.nav_mid` drawer on mobile screens. |
 | `nav_link` | `index.html`, `product.html`, `receipt.html`, `style.css`, `receipt.css`, `script.js` | Navigation Menu Link | Interactive navigation anchor with hover color transition and scroll spy active indicator. |
 | `nav_right` | `index.html`, `product.html`, `receipt.html`, `style.css`, `receipt.css` | Navigation Right Cluster | Container clustering right-aligned utility tools such as language switchers and cart button. |
+| `desktop_only` | `index.html`, `product.html`, `receipt.html`, `style.css` | Desktop Only Visibility Modifier | Utility class displaying the top-bar language switcher on desktop and hiding it on mobile `<= 56.25rem`. |
 | `lang_switch` | `index.html`, `product.html`, `receipt.html`, `style.css`, `receipt.css` | Language Switcher Capsule | Bordered pill capsule enclosing Indonesian and English locale selector buttons. |
 | `lang_btn` | `index.html`, `product.html`, `receipt.html`, `style.css`, `receipt.css` | Language Selection Button | Interactive toggle button switching between `IDN` and `ENG` interface languages. |
 | `btn_cart` | `receipt.html`, `receipt.css` | Cart Action Button | Crimson pill anchor button linking to shopping cart with hover elevation. |
@@ -36,23 +41,22 @@
 | Identifier | File Source | Full Meaning | Function & Purpose |
 | :--- | :--- | :--- | :--- |
 | `hero_sec` | `index.html`, `style.css` | Hero Main Section | Full-viewport introductory section showcasing hero title, tulip centerpiece, and catalog CTA. |
-| `hero_container` | `index.html`, `style.css` | Hero Content Container | Relative vertical flex container coordinating headline and three-column subgrid. |
-| `headline_wrapper` | `index.html`, `style.css` | Headline Layer Wrapper | Bounding box overlaying solid and stroked typography layers for visual depth. |
-| `hero_headline` | `index.html`, `style.css` | Hero Display Headline | 160px ultra-bold title "Decor At Finest" with tight negative letter-spacing. |
-| `hero_solid` | `index.html`, `style.css` | Hero Solid Text Layer | Base solid dark typography layer rendered behind outline text. |
-| `hero_outline` | `index.html`, `style.css` | Hero Outline Text Layer | Top transparent typography layer with 1px stroke creating overlapping depth. |
+| `hero_stage` | `index.html`, `style.css` | Hero Stage Architecture | Cohesive vertical flex container organizing `.hero_poster`, `.hero_bottom_row`, and `.feat_bar` in a single desktop fold. |
+| `hero_poster` | `index.html`, `style.css` | Hero Layered Visual Poster | Centered container holding the radial glow, solid text, overlapping tulip flower, and hollow stroke text overlay. |
+| `hero_glow` | `index.html`, `style.css` | Hero Radial Background Glow | Soft circular pink radial gradient glow positioned behind the tulip petals. |
+| `hero_headline` | `index.html`, `style.css` | Hero Display Headline | Ultra-bold title "Decor At Finest" styled with Figtree and cursive Telma. |
+| `hero_solid` | `index.html`, `style.css` | Hero Solid Text Layer | Base solid dark typography layer rendered behind outline text and tulip. |
+| `hero_tulip_wrap` | `index.html`, `style.css` | Hero Tulip Image Wrapper | Absolutely positioned wrapper aligning tulip petals across "At" and extending stem down the center. |
+| `tulip_img` | `index.html`, `style.css` | Centerpiece Tulip Image | Handcrafted tulip centerpiece image with smooth hover scaling. |
+| `hero_outline` | `index.html`, `style.css` | Hero Outline Text Layer | Front transparent typography layer with 1px text-stroke sitting over the petals for layered depth. |
 | `hero_finest` | `index.html`, `style.css` | Hero Script Accent | Italic cursive Telma wordmark emphasizing "Finest" in crimson `#E3475D`. |
-| `hero_grid` | `index.html`, `style.css` | Hero Three-Column Grid | Coordinates left description copy, center tulip visual, and right action button. |
+| `hero_bottom_row` | `index.html`, `style.css` | Hero Bottom Flanking Row | Row positioning left description copy and right CTA button flanking the tulip stem. |
 | `hero_left` | `index.html`, `style.css` | Hero Left Text Column | Contains secondary heading and description of recycled plastic craftsmanship. |
-| `hero_sub_title` | `index.html`, `style.css` | Hero Subtitle Heading | Bold 26px heading "Turning Waste Into Something Beautiful". |
+| `hero_sub_title` | `index.html`, `style.css` | Hero Subtitle Heading | Bold heading "Turning Waste Into Something Beautiful". |
 | `hero_desc` | `index.html`, `style.css` | Hero Description Paragraph | Muted body copy highlighting handmade craftsmanship and sustainability. |
-| `hero_center` | `index.html`, `style.css` | Hero Visual Container | Absolutely positioned container centering the tulip floral image with radial glow. |
-| `tulip_img` | `index.html`, `style.css` | Centerpiece Tulip Image | 495px handcrafted tulip centerpiece image with smooth hover scaling. |
 | `hero_right` | `index.html`, `style.css` | Hero Right Action Column | Right-aligned block containing the catalog CTA button and promotional caption. |
 | `hero_cta_btn` | `index.html`, `style.css` | Hero Catalog Button | Crimson pill button navigating customer to `#products`. |
 | `right_desc` | `index.html`, `style.css` | Right Promotional Caption | Caption text promoting the Limited Time Pack. |
-| `feat_wrap` | `index.html`, `style.css` | Features Section Wrapper | Full-width section framing the elevated features card bar. |
-| `feat` | `index.html`, `style.css` | Features Container Modifier | Elevates z-index of feature bar container above surrounding canvas elements. |
 | `feat_bar` | `index.html`, `style.css` | Features Banner Card | Rounded surface card with border and drop shadow presenting four core value pillars. |
 | `feat_item` | `index.html`, `style.css` | Feature Item Row | Horizontal flex item pairing an icon and short benefit statement. |
 | `feat_divider` | `index.html`, `style.css` | Feature Vertical Divider | 1px light gray vertical line separating individual feature items. |
@@ -418,3 +422,26 @@
 | `pack_name_id` | `receipt.js` | Indonesian Pack Name Catalog Property | Receipt catalog default property storing Indonesian pack name. |
 | `category_en` | `product.js`, `receipt.js` | English Category Catalog Property | Master catalog property storing English category name. |
 | `category_id` | `product.js`, `receipt.js` | Indonesian Category Catalog Property | Master catalog property storing Indonesian category name. |
+
+---
+
+## 7. Responsive & CSS Custom Property Tokens (`:root`)
+
+| Identifier | File Source | Full Meaning | Function & Purpose |
+| :--- | :--- | :--- | :--- |
+| `init_mobile_nav` | `script.js`, `product.js`, `receipt.js` | Mobile Navigation Initializer | Attaches click and resize listeners to `.nav_menu_btn` to toggle `.nav_mid.is_open`. |
+| `--color_primary` | `style.css` | Primary Brand Crimson | `#E3475D` - Main brand accent, logos, active links, primary buttons. |
+| `--color_primary_hover` | `style.css` | Primary Button Hover Color | `#C83244` - Darker crimson for hover states. |
+| `--color_primary_alt` | `style.css` | Alternative Crimson | `#e03e52` - Cart button, eyebrow labels, checkout actions. |
+| `--color_accent_green` | `style.css` | Supporting Eco Green | `#24CC63` - Feature icons, WhatsApp indicators, quantity increment buttons. |
+| `--color_accent_pink` | `style.css` | Supporting Accent Pink | `#F5B0C4` - Product icon badge backgrounds and floral swatches. |
+| `--color_soft_pink` | `style.css` | Soft Pink Surface Fill | `#FDECEF` - Category tag pills, empty cart icon background. |
+| `--color_soft_green` | `style.css` | Soft Green Surface Fill | `#EAFAF1` - Free badge backgrounds, COD guarantee banner. |
+| `--font_primary` | `style.css` | Display Cursive Font | `"Telma Variable", "Telma", cursive` - Headings, wordmarks, script accents. |
+| `--font_secondary` | `style.css` | Primary Interface Font | `"Figtree", sans-serif` - Body copy, controls, buttons, tables. |
+| `--text_heading` | `style.css` | Major Section Heading Size | `2.5rem` (40px) - Design System JUDUL. |
+| `--text_desc` | `style.css` | Description & Subtitle Size | `1.25rem` (20px) - Design System KETERANGAN. |
+| `--text_hero` | `style.css` | Hero Display Fluid Size | `clamp(4rem, 11vw, 10rem)` - Fluid responsive hero title. |
+| `--radius_pill` | `style.css` | Full Pill Border Radius | `9999px` - Buttons, tags, capsules, badges. |
+| `--container_max` | `style.css` | Layout Max Width Boundary | `75rem` (1200px) - Page container constraints. |
+| `--nav_height` | `style.css` | Fixed Navigation Bar Height | `4.75rem` (76px) - Nav bar height and offset reference. |

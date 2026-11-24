@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>ReBloom - Shopping Cart &amp; Order Receipt</title>
   <meta name="description" content="Review your shopping cart, manage handcrafted recycled floral decor items, and proceed to WhatsApp Pre-Order COD checkout.">
   <link rel="icon" type="image/png" href="assets/images/Logo.png">
@@ -11,6 +11,7 @@
   <link href="https://api.fontshare.com/v2/css?f[]=telma@300,400,500,700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="assets/css/receipt.css">
 </head>
 <body>
@@ -18,25 +19,36 @@
   
   <header>
     <nav class="navbar">
-        <div class="nav_left">
-            <a href="index.html">
-                <img src="assets/images/Logo.png" alt="ReBloom Logo" class="logo_img">
-                <span class="logo_txt">ReBloom</span>
-            </a>
-        </div>
-        
-        <ul class="nav_mid">
-            <li><a href="index.html#home" class="nav_link" data-i18n="nav_home">Home</a></li>
-            <li><a href="index.html#about" class="nav_link" data-i18n="nav_about">About</a></li>
-            <li><a href="index.html#products" class="nav_link" data-i18n="nav_products">Product</a></li>
-            <li><a href="index.html#faq" class="nav_link" data-i18n="nav_faq">FAQ</a></li>
-            <li><a href="index.html#contact" class="nav_link" data-i18n="nav_contact">Contact</a></li>
-        </ul>
-        
-        <div class="nav_right">
-            <div class="lang_switch">
-                <button type="button" class="lang_btn" data-lang="IDN">IDN</button>
-                <button type="button" class="lang_btn active" data-lang="ENG">ENG</button>
+        <div class="nav_container">
+            <div class="nav_left">
+                <a href="index.html">
+                    <img src="assets/images/Logo.png" alt="ReBloom Logo" class="logo_img">
+                    <span class="logo_txt">ReBloom</span>
+                </a>
+            </div>
+            
+            <ul class="nav_mid">
+                <li><a href="index.html#home" class="nav_link" data-i18n="nav_home">Home</a></li>
+                <li><a href="index.html#about" class="nav_link" data-i18n="nav_about">About</a></li>
+                <li><a href="index.html#products" class="nav_link" data-i18n="nav_products">Product</a></li>
+                <li><a href="index.html#faq" class="nav_link" data-i18n="nav_faq">FAQ</a></li>
+                <li><a href="index.html#contact" class="nav_link" data-i18n="nav_contact">Contact</a></li>
+                <li class="nav_lang_item">
+                    <div class="lang_switch">
+                        <button type="button" class="lang_btn" data-lang="IDN">IDN</button>
+                        <button type="button" class="lang_btn active" data-lang="ENG">ENG</button>
+                    </div>
+                </li>
+            </ul>
+            
+            <div class="nav_right">
+                <div class="lang_switch desktop_only">
+                    <button type="button" class="lang_btn" data-lang="IDN">IDN</button>
+                    <button type="button" class="lang_btn active" data-lang="ENG">ENG</button>
+                </div>
+                <button type="button" class="nav_menu_btn" aria-label="Toggle navigation menu" aria-expanded="false">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
             </div>
         </div>
     </nav>

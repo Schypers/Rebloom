@@ -16,11 +16,12 @@
 
 ## 2. Strict Frontend Architectural Invariants
 All UI/UX implementations across the ReBloom codebase must obey the following non-negotiable engineering rules:
-1. **Zero CSS Custom Properties**: Strictly **NO** `:root` declarations and **NO** `var(--...)` functions in `style.css`, `product.css`, or `receipt.css`. Every hex code, pixel dimension, and font family must be hardcoded directly onto its target CSS selector rule.
-2. **Strict `snake_case` Naming**: Every HTML `class`, HTML `id`, data attribute (`data-*`), translation dictionary key, and JavaScript identifier must use lowercase `snake_case` (e.g., `.cart_page_wrapper`, `.empty_cart_card`, `.cart_item_card`, `.qty_stepper`, `data-i18n`, `data-i18n-placeholder`). Standard Font Awesome classes (e.g., `fa-solid`, `fa-cart-shopping`) retain their official syntax.
-3. **Font Awesome 6.4.0 Icons Only**: All icons must use Font Awesome 6.4.0 classes (`<i class="fa-solid ..."></i>`, `<i class="fa-regular ..."></i>`, or `<i class="fa-brands ..."></i>`). Inline `<svg>` elements are strictly prohibited.
-4. **Icon and Nested Node Preservation**: When applying translations, never destroy nested `<i>` icons or dynamic `<span>` counters. Translators must target dedicated text nodes or targeted child elements.
-5. **Zero Backend Dependencies**: All cart persistence is maintained in `localStorage` under `rebloom_cart`, language selection under `rebloom_lang`, with checkout dispatching directly to WhatsApp (`6282132829795`).
+1. **Centralized `:root` Design System Tokens**: All brand colors, typography families, font scales, spacing steps, border radii, shadows, and layout dimensions are declared as CSS custom properties in `:root` at the top of `assets/css/style.css`. All stylesheets (`style.css`, `product.css`, `receipt.css`) consume these tokens via `var(--...)`. Layout boundaries use `--container_max: 75rem;` and responsive container gutters `--container_gutter: clamp(1rem, 4vw, 2rem);` ensuring unified horizontal edge alignment across the fixed navbar (`.nav_container`) and all content sections (`.container`).
+2. **Scalable `rem` Units**: Typography and proportional spacing must use `rem` units anchored to `html { font-size: 100% }` (`1rem = 16px`). Fixed `px` units are retained only for hairline borders (`1px`/`2px`) and pill radii (`9999px`).
+3. **Strict `snake_case` Naming**: Every HTML `class`, HTML `id`, CSS custom property (`--snake_case`), data attribute (`data-*`), translation dictionary key, and JavaScript identifier must use lowercase `snake_case` (e.g., `--color_primary`, `.nav_container`, `.desktop_only`, `.nav_lang_item`, `.hero_section`, `.hero_stage`, `.hero_glow`, `.hero_title_stack`, `.hero_title_back`, `.hero_title_front`, `.hero_title_solid`, `.hero_title_script`, `.hero_tulip_clip`, `.hero_tulip_img`, `.hero_bottom_row`, `.hero_copy`, `.hero_cta_group`, `.hero_features_card`, `.cart_page_wrapper`, `.empty_cart_card`, `.cart_item_card`, `.qty_stepper`, `init_mobile_nav`, `data-i18n`, `data-i18n-placeholder`). Standard Font Awesome classes (e.g., `fa-solid`, `fa-cart-shopping`) retain their official syntax.
+4. **Font Awesome 6.4.0 Icons Only**: All icons must use Font Awesome 6.4.0 classes (`<i class="fa-solid ..."></i>`, `<i class="fa-regular ..."></i>`, or `<i class="fa-brands ..."></i>`). Inline `<svg>` elements are strictly prohibited.
+5. **Icon and Nested Node Preservation**: When applying translations, never destroy nested `<i>` icons or dynamic `<span>` counters. Translators must target dedicated text nodes or targeted child elements.
+6. **Zero Backend Dependencies**: All cart persistence is maintained in `localStorage` under `rebloom_cart`, language selection under `rebloom_lang`, with checkout dispatching directly to WhatsApp (`6282132829795`).
 
 ---
 
@@ -60,20 +61,26 @@ All UI/UX implementations across the ReBloom codebase must obey the following no
 ## 4. Typography System
 
 ### 4.1 Font Families
-1. **Font Utama (Expressive Brand & Script Accent)**: `'Telma', cursive, serif` (imported via Fontshare CDN: `weights 300, 400, 500, 700`).
-   - **Application**: Brand wordmark (`.logo_txt`).
-2. **Font Pendukung (Primary UI, Headings & Body Copy)**: `'Figtree', sans-serif` (imported via Google Fonts CDN: `weights 400..800`).
+1. **Font Utama (Expressive Brand & Script Accent)**: `'Telma Variable', 'Telma', cursive, serif` (imported via Fontshare CDN: `weights 300, 400, 500, 700`, bound to `var(--font_primary)`).
+   - **Application**: Brand wordmark (`.logo_txt`), script accent (`.hero_finest`, `.sec_pay_brand`).
+2. **Font Pendukung (Primary UI, Headings & Body Copy)**: `'Figtree', sans-serif` (imported via Google Fonts CDN: `weights 300..900`, bound to `var(--font_secondary)`).
    - **Application**: Global `body` typography, navigation links, section titles, product cards, order summary, buttons, and numeric price displays.
 
-### 4.2 Typographic Hierarchy
-- **Cart Page Title (`.cart_main_title`)**: `32px` (`font-weight: 800`, `color: #1a1a1a`, `line-height: 1.2`).
-- **Eyebrow Label (`.cart_eyebrow`)**: `12px` (`font-weight: 800`, `letter-spacing: 1.5px`, `text-transform: uppercase`, `color: #e03e52`).
-- **Empty State Heading (`.empty_title`)**: `24px` (`font-weight: 800`, `color: #1a1a1a`).
-- **Order Summary Heading (`.summary_heading`)**: `20px` (`font-weight: 800`, `color: #1a1a1a`).
-- **Item Title (`.item_title`)**: `18px` (`font-weight: 700`, `color: #1a1a1a`).
-- **Grand Total Numerals (`#summary_grand_total`)**: `24px` (`font-weight: 800`, `color: #1a1a1a`).
-- **Cart Unit Price (`.unit_price_val`)**: `15px` (`font-weight: 700`, `color: #1a1a1a`).
-- **Footnote / Small Meta (`.checkout_footnote`, `.empty_trust_note`)**: `12px` (`font-weight: 400`, `color: #888888`).
+### 4.2 Typographic Scale (1rem = 16px Base)
+| Token | rem Value | Pixel Equivalent | Role / Component Binding |
+| :--- | :--- | :--- | :--- |
+| `--text_2xs` | `0.6875rem` | 11px | Micro labels, category badges (`.item_tag_pill`), unit price labels. |
+| `--text_xs` | `0.75rem` | 12px | Footnotes, trust captions (`.checkout_footnote`, `.cart_eyebrow`). |
+| `--text_sm` | `0.875rem` | 14px | Secondary descriptions, feature list items, footer copyright. |
+| `--text_base` | `1rem` | 16px | Standard body copy, navigation menu links, inputs, and form controls. |
+| `--text_md` | `1.0625rem` | 17px | Medium navigation labels, FAQ headers (`.faq_q`). |
+| `--text_lg` | `1.125rem` | 18px | Sub-headings, rate ratings, product option labels (`.custom_lbl`). |
+| `--text_desc` | `1.25rem` | 20px | Design System KETERANGAN, card titles (`.prod_title`), body lead copy. |
+| `--text_xl` | `1.5rem` | 24px | Grand totals, empty state headings (`.empty_title`). |
+| `--text_2xl` | `1.625rem` | 26px | Section subtitles (`.hero_sub_title`, `.vm_title`). |
+| `--text_3xl` | `2rem` | 32px | Cart main title (`.cart_main_title`), medium display headings. |
+| `--text_heading` | `2.5rem` | 40px | Design System JUDUL, major section headings (`.about_title`, `.prod_heading`). |
+| `--text_hero` | `clamp(4rem, 11vw, 10rem)` | 64px–160px | Fluid Hero Display Headline (`.hero_headline`). |
 
 ---
 

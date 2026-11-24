@@ -132,16 +132,24 @@ ReBloom Project Root
 ```text
 Landing Page Architecture (index.html -> assets/js/script.js)
 ├── Fixed Navigation Header (.navbar)
-│   ├── Brand Cluster (.nav_left > a > .logo_img, .logo_txt)
-│   ├── Section Links (.nav_mid > li > .nav_link [Home, About, Product, FAQ, Contact])
-│   └── Right Utilities (.nav_right > .lang_switch > .lang_btn [IDN, ENG active by default], .btn_cart)
+│   └── Centered Inner Container (.nav_container)
+│       ├── Brand Cluster (.nav_left > a > .logo_img, .logo_txt)
+│       ├── Section Links & Mobile Drawer (.nav_mid > li > .nav_link [Home, About, Product, FAQ, Contact], .nav_lang_item)
+│       └── Right Utilities (.nav_right > .lang_switch.desktop_only, .btn_cart, .nav_menu_btn)
 │
-├── Hero Section (.hero_sec#home)
-│   └── Hero Container (.container.hero_container)
-│       ├── Dual-Layer Headline (.headline_wrapper > .hero_headline.hero_solid, .hero_headline.hero_outline)
-│       └── Three-Column Hero Grid (.hero_grid)
+├── Hero Section (.hero_section#home)
+│   ├── Stage Box (.hero_stage)
+│   │   ├── Radial Glow (.hero_glow)
+│   │   ├── Dual-Layer Interleaved Headline (.hero_title_stack)
+│   │   │   ├── Solid Text (.hero_title.hero_title_back > .hero_title_solid, .hero_title_script)
+│   │   │   └── Front Outline Stroke (.hero_title.hero_title_front > .hero_title_solid, .hero_title_script)
+│   │   ├── Clipped Tulip Visual (.hero_tulip_clip > .hero_tulip_img)
+│   │   └── Flanking Bottom Content (.hero_bottom_row)
+│   │       ├── Left Copy (.hero_copy > .hero_sub_title, .hero_desc)
+│   │       └── Right CTA (.hero_cta_group > .hero_cta_btn, .right_desc)
+│   │
+│   └── Value Pillars Card (.hero_features_card > 4x .feat_item, .feat_divider)
 │
-├── Value Pillars Bar (.feat_wrap > .container.feat > .feat_bar)
 ├── Vision & Mission Section (.vm_sec#vision > .container.vm_box)
 ├── About Origin Section (.about_sec#about > .container.about_box)
 ├── Why Choose Us Section (.why_sec > .container)
@@ -332,7 +340,8 @@ Dedicated shopping cart and WhatsApp pre-order controller initialized on `DOMCon
 ---
 
 ## 7. External Asset, Typography & Styling Pipeline
-- **Fontshare CDN**: Font `Telma` (`weights 300, 400, 500, 700`).
-- **Google Fonts CDN**: Font `Figtree` (`weights 400, 500, 600, 700, 800`).
-- **Font Awesome CDN (v6.4.0)**: Icons for cart (`fa-cart-shopping`), trash (`fa-trash-can`), arrows (`fa-arrow-right`, `fa-arrow-left`), checkmarks (`fa-circle-check`, `fa-check`), cancel (`fa-xmark`), pen (`fa-pen-to-square`), and shield (`fa-shield-halved`).
-- **Zero CSS Variables**: Hardcoded color hexes and dimensions throughout.
+- **Fontshare CDN**: Font `Telma Variable` (`weights 300, 400, 500, 700`).
+- **Google Fonts CDN**: Font `Figtree` (`weights 300..900`).
+- **Font Awesome CDN (v6.4.0)**: Icons for cart (`fa-cart-shopping`), bars (`fa-bars`), trash (`fa-trash-can`), arrows (`fa-arrow-right`, `fa-arrow-left`), checkmarks (`fa-circle-check`, `fa-check`), cancel (`fa-xmark`), pen (`fa-pen-to-square`), and shield (`fa-shield-halved`).
+- **Centralized `:root` Token Architecture**: Organizes all brand colors, semantic surfaces, rem typography, spacing steps, and elevation into `:root` custom properties inside `assets/css/style.css`.
+- **Stylesheet Hierarchy**: `receipt.html` loads `assets/css/style.css` FIRST, followed by `assets/css/receipt.css`, ensuring shared resets, navbar tokens, and mobile drawer styles are inherited seamlessly.

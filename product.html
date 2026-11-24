@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>ReBloom - Flower Pot Regular</title>
     <meta name="description" content="ReBloom creates beautiful handmade flower vases and bouquets from recycled plastic, combining elegance, sustainability, and creative craftsmanship.">
     <link rel="icon" type="image/png" href="assets/images/Logo.png">
@@ -16,30 +16,41 @@
 </head>
 <body>
     <nav class="navbar">
-        <div class="nav_left">
-            <a href="index.html#home">
-                <img src="assets/images/Logo.png" alt="ReBloom Logo" class="logo_img">
-                <span class="logo_txt">ReBloom</span>
-            </a>
-        </div>
-        
-        <ul class="nav_mid">
-            <li><a href="index.html#home" class="nav_link" data-i18n="nav_home">Home</a></li>
-            <li><a href="index.html#about" class="nav_link" data-i18n="nav_about">About</a></li>
-            <li><a href="index.html#products" class="nav_link active" data-i18n="nav_products">Product</a></li>
-            <li><a href="index.html#faq" class="nav_link" data-i18n="nav_faq">FAQ</a></li>
-            <li><a href="#contact" class="nav_link" data-i18n="nav_contact">Contact</a></li>
-        </ul>
-        
-        <div class="nav_right">
-            <div class="lang_switch">
-                <button type="button" class="lang_btn" data-lang="IDN">IDN</button>
-                <button type="button" class="lang_btn active" data-lang="ENG">ENG</button>
+        <div class="nav_container">
+            <div class="nav_left">
+                <a href="index.html#home">
+                    <img src="assets/images/Logo.png" alt="ReBloom Logo" class="logo_img">
+                    <span class="logo_txt">ReBloom</span>
+                </a>
             </div>
-            <a href="receipt.html" class="btn_cart" aria-label="Shopping Cart">
-              <i class="fa-solid fa-cart-shopping cart_icon"></i>
-              <span data-i18n="nav_cart">Cart</span>
-            </a>
+            
+            <ul class="nav_mid">
+                <li><a href="index.html#home" class="nav_link" data-i18n="nav_home">Home</a></li>
+                <li><a href="index.html#about" class="nav_link" data-i18n="nav_about">About</a></li>
+                <li><a href="index.html#products" class="nav_link active" data-i18n="nav_products">Product</a></li>
+                <li><a href="index.html#faq" class="nav_link" data-i18n="nav_faq">FAQ</a></li>
+                <li><a href="#contact" class="nav_link" data-i18n="nav_contact">Contact</a></li>
+                <li class="nav_lang_item">
+                    <div class="lang_switch">
+                        <button type="button" class="lang_btn" data-lang="IDN">IDN</button>
+                        <button type="button" class="lang_btn active" data-lang="ENG">ENG</button>
+                    </div>
+                </li>
+            </ul>
+            
+            <div class="nav_right">
+                <div class="lang_switch desktop_only">
+                    <button type="button" class="lang_btn" data-lang="IDN">IDN</button>
+                    <button type="button" class="lang_btn active" data-lang="ENG">ENG</button>
+                </div>
+                <a href="receipt.html" class="btn_cart" aria-label="Shopping Cart">
+                  <i class="fa-solid fa-cart-shopping cart_icon"></i>
+                  <span data-i18n="nav_cart">Cart</span>
+                </a>
+                <button type="button" class="nav_menu_btn" aria-label="Toggle navigation menu" aria-expanded="false">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
         </div>
     </nav>
 

@@ -4,6 +4,87 @@ All notable changes, bug fixes, UI enhancements, and structural refactors for th
 
 ---
 
+## [2026-11-24] - Hero Section Precision Restoration & Navbar Container Alignment
+
+### 1. Global Navbar Container Edge Alignment (All 5 HTML Pages & `style.css`)
+- **Inner Wrapper Alignment (`.nav_container`)**:
+  - Wrapped navbar content across all five pages (`index.html`, `product.html`, `product_2.html`, `product_3.html`, `receipt.html`) inside `<div class="nav_container">`.
+  - Configured `.nav_container` to match `.container` with `max-width: var(--container_max)` (`75rem` / `1200px`) and `padding-inline: var(--container_gutter)` (`clamp(1rem, 4vw, 2rem)`).
+  - Aligned the left edge of the ReBloom logo brand mark and text pixel-for-pixel with the left edge of `.hero_features_card` and all downstream page sections.
+- **Mobile Navbar Item Reordering & Drawer Integration**:
+  - Implemented `.desktop_only` to hide the top-bar language switcher on viewports `<= 56.25rem` (900px).
+  - Added `<li class="nav_lang_item"><div class="lang_switch">...</div></li>` inside the hamburger dropdown drawer (`.nav_mid`), allowing full bilingual toggling from within the mobile menu.
+  - Positioned the Cart button (`.btn_cart`) to the left of the mobile hamburger menu toggle (`.nav_menu_btn`), placing the hamburger button at the far right edge of the header.
+
+### 2. Desktop Hero Precision Layout (`>= 48.0625rem` / `769px`) Matching `normal hero_2.png`
+- **Two-Block Hero Geometry**:
+  - Re-architected the hero section into `.hero_stage` (upper visual poster + copy/CTA) and `.hero_features_card` (floating white 4-item eco card).
+  - Maintained natural vertical flex separation (`gap: clamp(8.5rem, 13.5vw, 13.5rem)`) between `.hero_title_stack` and `.hero_bottom_row`, permanently preventing headline collisions with copy and CTA.
+- **Interleaved Stacking Context**:
+  - Layer 0: Circular pink radial glow (`.hero_glow`).
+  - Layer 1: Solid base headline (`.hero_title_back` with `.hero_title_solid` + `.hero_title_script`).
+  - Layer 2: Clipped tulip container (`.hero_tulip_clip` with `overflow: hidden; pointer-events: none;`) guaranteeing the stem terminates cleanly at the top border of `.hero_features_card` and cannot poke out underneath.
+  - Layer 3: Overlay headline (`.hero_title_front`) with `1.25px` black stroke on `"Decor At"` and transparent script, rendering crisp outline depth over the petals.
+- **Flanking Bottom Elements**:
+  - `.hero_copy` on the left and `.hero_cta_group` on the right flank the central tulip stem with balanced spacing.
+
+### 3. Mobile Editorial Poster Layout (`<= 48rem` / `768px`, iPhone 16 at `393px`)
+- **Stacked 2-Line Headline**:
+  - Broke `"Decor At"` and `"Finest"` into 2 prominent stacked lines behind the tulip bloom.
+- **Confined Tulip with Bottom Scrim & Fade-out**:
+  - Confined `.hero_tulip_clip` to the upper visual zone with a vertical gradient mask and white gradient scrim (`.hero_tulip_clip::after`), softly melting the lower stem into white.
+  - Positioned `.hero_bottom_row` cleanly below the faded poster with zero text/button collisions.
+- **Compact 2x2 Feature Grid**:
+  - Transformed `.hero_features_card` into a 2x2 grid on mobile screens, eliminating the bloated 1-column list.
+
+---
+
+## [2026-11-23] - Centralized Design System Token Architecture, rem Typography & Responsive System
+
+### 1. Centralized `:root` Token Architecture (`assets/css/style.css`)
+- **Single Source of Truth `:root` Block**:
+  - Replaced the deprecated legacy "Zero CSS Variables" guideline with a comprehensive, centralized `:root` CSS custom property architecture matching official ReBloom Design System tokens (`DESIGN SISTEM.png`).
+  - Consolidated all brand colors (`--color_primary: #E3475D`, `--color_primary_hover: #C83244`, `--color_primary_alt: #e03e52`), supporting accents (`--color_accent_green: #24CC63`, `--color_accent_pink: #F5B0C4`, soft green/pink tints), surfaces, text shades, and floral swatch hex codes into strict `--snake_case` custom properties.
+  - Consolidated font families (`--font_primary: "Telma Variable"`, `--font_secondary: "Figtree"`), spacing steps (`--space_2xs` to `--space_5xl`), border radii (`--radius_sm` to `--radius_pill`), container boundaries (`--container_max: 75rem`), and elevation shadows.
+
+### 2. Scalable `rem` Typography & Proportional Sizing
+- **Root Scale & Normalization**:
+  - Anchored base sizing to `html { font-size: 100%; scroll-behavior: smooth; overflow-x: clip; }` (`1rem = 16px`).
+  - Migrated all hardcoded `px` font sizes across `style.css`, `product.css`, and `receipt.css` to scalable `rem` units (or `var(--text_*)` tokens).
+  - Implemented fluid `clamp()` bounds for major display typography:
+    - Hero display headline: `clamp(4rem, 11vw, 10rem)` (gracefully scaling from 64px to 160px).
+    - Product detail title: `clamp(1.75rem, 4vw, 2.875rem)`.
+    - Product price value: `clamp(2rem, 5vw, 3.5rem)`.
+    - Related products title: `clamp(1.75rem, 4vw, 3.25rem)`.
+  - Converted margins, paddings, gaps, and structural element dimensions to `rem`, strictly retaining `px` only for hairline borders (`1px`/`2px`) and full-pill radii (`9999px`).
+
+### 3. Responsive 7-Breakpoint Architecture & Mobile Drawer Navigation
+- **Comprehensive Desktop-First Responsive Grid**:
+  - Standardized unified breakpoints: `80rem` (1280px), `64rem` (1024px), `56.25rem` (900px), `48rem` (768px), `40rem` (640px), `30rem` (480px), and `24.5625rem` (393px - iPhone 16).
+  - Guaranteed zero horizontal scrolling (`scrollWidth <= innerWidth`) from 360px to 1440px+.
+  - Dedicated iPhone 16 (393px × 852px) optimizations: compact logo sizing, cart badge hiding text on small screens, touch target enforcement (>= 44px for buttons and swatches).
+- **Responsive Mobile Navigation Drawer**:
+  - Added accessible hamburger button `<button type="button" class="nav_menu_btn" aria-label="Toggle navigation menu" aria-expanded="false"><i class="fa-solid fa-bars"></i></button>` to all 5 HTML templates.
+  - Styled full-width floating dropdown drawer on `style.css` at `<= 56.25rem` (900px).
+  - Implemented isolated, accessible `init_mobile_nav()` across `assets/js/script.js`, `assets/js/product.js`, and `assets/js/receipt.js` to toggle `.is_open`, swap `fa-bars` ↔ `fa-xmark`, update `aria-expanded`, close on link click, and auto-dismiss on window resize above 900px.
+- **iOS Safari Guardrails**:
+  - Added `viewport-fit=cover` to `<meta name="viewport">` across all 5 HTML pages.
+  - Implemented `@supports` block for `env(safe-area-inset-top)` and `env(safe-area-inset-bottom)`.
+  - Added input font-size normalization (`font-size: max(1rem, 16px)`) to completely eliminate iOS Safari automatic zoom on focus.
+  - Added `touch-action: manipulation` and `-webkit-tap-highlight-color: transparent` across interactive controls.
+
+### 4. Stylesheet Loading & Redundancy Pruning
+- **Receipt Page Stylesheet Hierarchy**:
+  - Updated `receipt.html` to load `assets/css/style.css` FIRST, followed by `assets/css/receipt.css`.
+  - Pruned ~180 lines of duplicated font imports, resets, navbar, lang switch, and button styles from `receipt.css`.
+  - Pruned duplicated `.btn_cart` and `.cart_icon` rules from `product.css`.
+  - Added 4 responsive breakpoints (`56.25rem`, `40rem`, `30rem`, `24.5625rem`) to `receipt.css`, which previously lacked responsive rules.
+
+### 5. Documentation Synchronization
+- Synchronized `AGENT.md`, `Design_System.md`, `variables.md`, `architecture.md`, and `PRD.md` with the new `:root` design token architecture, `rem` typography scale, and responsive guidelines.
+
+---
+
 ## [2026-11-11] - WhatsApp Contact Form Handoff Implementation
 
 ### 1. Dynamic WhatsApp Inquiry Dispatch (`assets/js/script.js`, `assets/js/product.js`)

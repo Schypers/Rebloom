@@ -3,7 +3,7 @@
 <!-- Bagian head memuat metadata dokumen, pemanggilan font eksternal, dan tautan stylesheet. -->
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>ReBloom</title>
     <meta name="description" content="ReBloom creates beautiful handmade flower vases and bouquets from recycled plastic, combining elegance, sustainability, and creative craftsmanship.">
     <link rel="icon" type="image/png" href="assets/images/Logo.png">
@@ -17,53 +17,73 @@
 <body>
     <!-- Bagian navigasi utama yang memuat logo, menu tautan halaman, pengalih bahasa, dan tombol keranjang belanja. -->
     <nav class="navbar">
-        <div class="nav_left">
-            <a href="#home">
-                <img src="assets/images/Logo.png" alt="ReBloom Logo" class="logo_img">
-                <span class="logo_txt">ReBloom</span>
-            </a>
-        </div>
-        
-        <ul class="nav_mid">
-            <li><a href="#home" class="nav_link active" data-i18n="nav_home">Home</a></li>
-            <li><a href="#about" class="nav_link" data-i18n="nav_about">About</a></li>
-            <li><a href="#products" class="nav_link" data-i18n="nav_products">Product</a></li>
-            <li><a href="#faq" class="nav_link" data-i18n="nav_faq">FAQ</a></li>
-            <li><a href="#contact" class="nav_link" data-i18n="nav_contact">Contact</a></li>
-        </ul>
-        
-        <div class="nav_right">
-            <div class="lang_switch">
-                <button type="button" class="lang_btn" data-lang="IDN">IDN</button>
-                <button type="button" class="lang_btn active" data-lang="ENG">ENG</button>
+        <div class="nav_container">
+            <div class="nav_left">
+                <a href="#home">
+                    <img src="assets/images/Logo.png" alt="ReBloom Logo" class="logo_img">
+                    <span class="logo_txt">ReBloom</span>
+                </a>
             </div>
-            <a href="receipt.html" class="btn_cart">
-              <i class="fa-solid fa-cart-shopping cart_icon"></i>
-              <span data-i18n="nav_cart">Cart</span>
-            </a>
+            
+            <ul class="nav_mid">
+                <li><a href="#home" class="nav_link active" data-i18n="nav_home">Home</a></li>
+                <li><a href="#about" class="nav_link" data-i18n="nav_about">About</a></li>
+                <li><a href="#products" class="nav_link" data-i18n="nav_products">Product</a></li>
+                <li><a href="#faq" class="nav_link" data-i18n="nav_faq">FAQ</a></li>
+                <li><a href="#contact" class="nav_link" data-i18n="nav_contact">Contact</a></li>
+                <li class="nav_lang_item">
+                    <div class="lang_switch">
+                        <button type="button" class="lang_btn" data-lang="IDN">IDN</button>
+                        <button type="button" class="lang_btn active" data-lang="ENG">ENG</button>
+                    </div>
+                </li>
+            </ul>
+            
+            <div class="nav_right">
+                <div class="lang_switch desktop_only">
+                    <button type="button" class="lang_btn" data-lang="IDN">IDN</button>
+                    <button type="button" class="lang_btn active" data-lang="ENG">ENG</button>
+                </div>
+                <a href="receipt.html" class="btn_cart">
+                  <i class="fa-solid fa-cart-shopping cart_icon"></i>
+                  <span data-i18n="nav_cart">Cart</span>
+                </a>
+                <button type="button" class="nav_menu_btn" aria-label="Toggle navigation menu" aria-expanded="false">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
         </div>
     </nav>
 
     <!-- Section hero yang menampilkan judul promosi utama, foto produk unggulan, dan ajakan bertindak (CTA). -->
-    <section class="hero_sec" id="home">
-        <div class="container hero_container">
-            <div class="headline_wrapper">
-                <h1 class="hero_headline hero_solid">Decor At <span class="hero_finest">Finest</span></h1>
-                <h1 class="hero_headline hero_outline">Decor At <span class="hero_finest">Finest</span></h1>
+    <section class="hero_section" id="home">
+        <div class="hero_stage">
+            <div class="hero_glow" aria-hidden="true"></div>
+
+            <div class="hero_title_stack">
+                <h1 class="hero_title hero_title_back">
+                    <span class="hero_title_solid">Decor At</span>
+                    <span class="hero_title_script">Finest</span>
+                </h1>
+                <div class="hero_title hero_title_front" aria-hidden="true">
+                    <span class="hero_title_solid">Decor At</span>
+                    <span class="hero_title_script">Finest</span>
+                </div>
             </div>
-            <div class="hero_grid">
-                <div class="hero_left">
+
+            <div class="hero_tulip_clip" aria-hidden="true">
+                <img src="assets/images/Tulip_hero.png" alt="ReBloom Handcrafted Tulip Decor" class="hero_tulip_img">
+            </div>
+
+            <div class="hero_bottom_row">
+                <div class="hero_copy">
                     <h2 class="hero_sub_title" data-i18n="hero_subtitle">Turning Waste Into<br>Something Beautiful</h2>
                     <p class="hero_desc" data-i18n="hero_desc">
                         ReBloom creates beautiful handmade flower vases and bouquets from recycled plastic, combining elegance, sustainability, and creative craftsmanship.
                     </p>
                 </div>
-                
-                <div class="hero_center">
-                    <img src="assets/images/Tulip_hero.png" alt="Handcrafted Tulip Decor" class="tulip_img">
-                </div>
-                
-                <div class="hero_right">
+
+                <div class="hero_cta_group">
                     <a href="#products" class="btn btn_primary hero_cta_btn" data-i18n="hero_cta">See Our Products</a>
                     <p class="hero_desc right_desc" data-i18n="hero_cta_sub">
                         Get one for Limited Time Pack now!
@@ -71,48 +91,43 @@
                 </div>
             </div>
         </div>
-    </section>
 
-    <!-- Bagian fitur unggulan yang menyoroti kelebihan produk seperti ramah lingkungan dan harga terjangkau. -->
-    <div class="feat_wrap">
-        <div class="container feat">
-            <div class="feat_bar">
-                <div class="feat_item">
-                    <div class="feat_icon">
-                        <i class="fa-solid fa-recycle"></i>
-                    </div>
-                    <span class="feat_txt" data-i18n="feat_eco">Environmentally friendly</span>
+        <div class="hero_features_card">
+            <div class="feat_item">
+                <div class="feat_icon">
+                    <i class="fa-solid fa-recycle"></i>
                 </div>
-                
-                <div class="feat_divider"></div>
-                
-                <div class="feat_item">
-                    <div class="feat_icon">
-                        <i class="fa-solid fa-hand-holding-heart"></i>
-                    </div>
-                    <span class="feat_txt" data-i18n="feat_handmade">Hand Made</span>
+                <span class="feat_txt" data-i18n="feat_eco">Environmentally friendly</span>
+            </div>
+            
+            <div class="feat_divider"></div>
+            
+            <div class="feat_item">
+                <div class="feat_icon">
+                    <i class="fa-solid fa-hand-holding-heart"></i>
                 </div>
-                
-                <div class="feat_divider"></div>
-                
-                <div class="feat_item">
-                    <div class="feat_icon">
-                        <i class="fa-solid fa-money-bill-wave"></i>
-                    </div>
-                    <span class="feat_txt" data-i18n="feat_affordable">Affordable prices</span>
+                <span class="feat_txt" data-i18n="feat_handmade">Hand Made</span>
+            </div>
+            
+            <div class="feat_divider"></div>
+            
+            <div class="feat_item">
+                <div class="feat_icon">
+                    <i class="fa-solid fa-money-bill-wave"></i>
                 </div>
-                
-                <div class="feat_divider"></div>
-                
-                <div class="feat_item">
-                    <div class="feat_icon">
-                        <i class="fa-solid fa-gift"></i>
-                    </div>
-                    <span class="feat_txt" data-i18n="feat_gift">Suitable as a gift</span>
+                <span class="feat_txt" data-i18n="feat_affordable">Affordable prices</span>
+            </div>
+            
+            <div class="feat_divider"></div>
+            
+            <div class="feat_item">
+                <div class="feat_icon">
+                    <i class="fa-solid fa-gift"></i>
                 </div>
+                <span class="feat_txt" data-i18n="feat_gift">Suitable as a gift</span>
             </div>
         </div>
-    </div>
+    </section>
 
     <!-- Section visi dan misi yang memaparkan tujuan jangka panjang serta dedikasi ReBloom terhadap lingkungan. -->
     <section class="vm_sec" id="vision">

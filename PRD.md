@@ -277,5 +277,8 @@ Halo Admin ReBloom! Saya ingin bertanya melalui formulir kontak website:
 - [x] Font Awesome icons and dynamic counter spans (`#cart_count_highlight`, `#summary_item_count`) are preserved without DOM destruction.
 - [x] WhatsApp message payload formats in the active language upon checkout.
 - [x] Strict 1-to-1 page-to-script architecture maintained across all pages.
-- [x] No `:root` declarations or CSS variables introduced in any stylesheet.
+- [x] Centralized `:root` CSS custom property architecture implemented with strict `--snake_case` tokens.
+- [x] Scalable `rem` typography and layout spacing anchored to `html { font-size: 100% }` (1rem = 16px).
+- [x] Responsive layout verified across all viewports (360px–1440px+) with zero horizontal overflow.
+- [x] Dedicated iPhone 16 viewport optimization (393px × 852px) with safe-area insets and mobile drawer navigation.
 - [x] All identifiers adhere strictly to `snake_case`.

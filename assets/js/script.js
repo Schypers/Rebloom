@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
       nav_faq: "FAQ",
       nav_contact: "Contact",
       nav_cart: "Cart",
-      hero_title: 'Decor At <span class="hero_finest">Finest</span>',
       hero_subtitle: "Turning Waste Into<br>Something Beautiful",
       hero_desc:
         "ReBloom creates beautiful handmade flower vases and bouquets from recycled plastic, combining elegance, sustainability, and creative craftsmanship.",
@@ -93,7 +92,6 @@ document.addEventListener("DOMContentLoaded", () => {
       nav_faq: "FAQ",
       nav_contact: "Kontak",
       nav_cart: "Keranjang",
-      hero_title: 'Dekorasi <span class="hero_finest">Terbaik</span>',
       hero_subtitle: "Mengubah Limbah Menjadi<br>Sesuatu yang Indah",
       hero_desc:
         "ReBloom menciptakan vas bunga dan buket buatan tangan yang indah dari plastik daur ulang, memadukan keanggunan, keberlanjutan, dan kerajinan kreatif.",
@@ -407,6 +405,49 @@ document.addEventListener("DOMContentLoaded", () => {
     contact_form.addEventListener("submit", handle_contact_submit);
   }
 
-  // Memulai inisialisasi fitur pengalih bahasa saat dokumen telah siap.
+  // Mengelola navigasi seluler (tombol hamburger dan drawer menu).
+  function init_mobile_nav() {
+    const menu_btn = document.querySelector(".nav_menu_btn");
+    const nav_menu = document.querySelector(".nav_mid");
+    const nav_links = document.querySelectorAll(".nav_link");
+
+    if (!menu_btn || !nav_menu) return;
+
+    menu_btn.addEventListener("click", () => {
+      const is_open = nav_menu.classList.toggle("is_open");
+      menu_btn.setAttribute("aria-expanded", is_open ? "true" : "false");
+      const icon = menu_btn.querySelector("i");
+      if (icon) {
+        icon.className = is_open ? "fa-solid fa-xmark" : "fa-solid fa-bars";
+      }
+    });
+
+    nav_links.forEach((link) => {
+      link.addEventListener("click", () => {
+        if (nav_menu.classList.contains("is_open")) {
+          nav_menu.classList.remove("is_open");
+          menu_btn.setAttribute("aria-expanded", "false");
+          const icon = menu_btn.querySelector("i");
+          if (icon) {
+            icon.className = "fa-solid fa-bars";
+          }
+        }
+      });
+    });
+
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 900 && nav_menu.classList.contains("is_open")) {
+        nav_menu.classList.remove("is_open");
+        menu_btn.setAttribute("aria-expanded", "false");
+        const icon = menu_btn.querySelector("i");
+        if (icon) {
+          icon.className = "fa-solid fa-bars";
+        }
+      }
+    });
+  }
+
+  // Memulai inisialisasi fitur pengalih bahasa dan navigasi seluler saat dokumen telah siap.
   init_language_switcher();
+  init_mobile_nav();
 });

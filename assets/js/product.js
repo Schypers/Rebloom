@@ -659,6 +659,49 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
+  // Mengelola navigasi seluler (tombol hamburger dan drawer menu).
+  function init_mobile_nav() {
+    const menu_btn = document.querySelector(".nav_menu_btn");
+    const nav_menu = document.querySelector(".nav_mid");
+    const nav_links = document.querySelectorAll(".nav_link");
+
+    if (!menu_btn || !nav_menu) return;
+
+    menu_btn.addEventListener("click", () => {
+      const is_open = nav_menu.classList.toggle("is_open");
+      menu_btn.setAttribute("aria-expanded", is_open ? "true" : "false");
+      const icon = menu_btn.querySelector("i");
+      if (icon) {
+        icon.className = is_open ? "fa-solid fa-xmark" : "fa-solid fa-bars";
+      }
+    });
+
+    nav_links.forEach((link) => {
+      link.addEventListener("click", () => {
+        if (nav_menu.classList.contains("is_open")) {
+          nav_menu.classList.remove("is_open");
+          menu_btn.setAttribute("aria-expanded", "false");
+          const icon = menu_btn.querySelector("i");
+          if (icon) {
+            icon.className = "fa-solid fa-bars";
+          }
+        }
+      });
+    });
+
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 900 && nav_menu.classList.contains("is_open")) {
+        nav_menu.classList.remove("is_open");
+        menu_btn.setAttribute("aria-expanded", "false");
+        const icon = menu_btn.querySelector("i");
+        if (icon) {
+          icon.className = "fa-solid fa-bars";
+        }
+      }
+    });
+  }
+
   init_gallery_swapper();
   init_language_switcher();
+  init_mobile_nav();
 });
